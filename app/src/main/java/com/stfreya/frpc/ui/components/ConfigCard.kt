@@ -13,7 +13,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.stfreya.frpc.FrpConfig
-import com.stfreya.frpc.Success
+
+// Color definitions
+val Success = Color(0xFF4CAF50)
+val Warning = Color(0xFFFF9800)
+val Error = Color(0xFFF44336)
 
 @Composable
 fun ConfigCard(

@@ -52,6 +52,11 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+// Color definitions
+val Success = Color(0xFF4CAF50)
+val Warning = Color(0xFFFF9800)
+val Error = Color(0xFFF44336)
+
 class MainActivity : ComponentActivity() {
     private val isStartup = MutableStateFlow(false)
     private val logText = MutableStateFlow("")
@@ -188,7 +193,7 @@ class MainActivity : ComponentActivity() {
                             val editor = preferences.edit()
                             editor.putBoolean(PreferencesKey.AUTO_START, newValue)
                             editor.apply()
-                            isStartup.value = newValue
+                            isStartup = newValue
                         }
                     )
                 }
