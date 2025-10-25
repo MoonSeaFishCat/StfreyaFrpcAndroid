@@ -37,18 +37,18 @@ android {
     }
 
     defaultConfig {
-        applicationId = "io.github.acedroidx.frp"
+        applicationId = "com.stfreya.frpc"
         minSdk = 23
         targetSdk = 35
         compileSdk = 35
-        versionCode = 8
-        versionName = "1.2.1"
+        versionCode = 1
+        versionName = "2.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         signingConfig = signingConfigs.getByName("AceKeystore")
 
-        buildConfigField("String", "FrpVersion", "\"0.61.1\"")
+        buildConfigField("String", "FrpVersion", "\"0.65.0\"")
         buildConfigField("String", "FrpcFileName", "\"libfrpc.so\"")
         buildConfigField("String", "FrpsFileName", "\"libfrps.so\"")
         buildConfigField("String", "FrpcConfigFileName", "\"frpc.toml\"")
@@ -93,34 +93,62 @@ android {
             isUniversalApk = true
         }
     }
-    namespace = "io.github.acedroidx.frp"
+    namespace = "com.stfreya.frpc"
 }
 
 dependencies {
+    // Kotlin
     implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.0")
+    
+    // Core Android
     implementation("androidx.core:core-ktx:1.15.0")
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.constraintlayout:constraintlayout:2.2.0")
 
+    // Lifecycle
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
     implementation("androidx.lifecycle:lifecycle-service:2.8.7")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
 
+    // Compose BOM
     val composeBom = platform("androidx.compose:compose-bom:2024.12.01")
     implementation(composeBom)
     androidTestImplementation(composeBom)
+    
+    // Compose Core
     implementation("androidx.compose.material3:material3")
-    // Android Studio Preview support
+    implementation("androidx.compose.material:material-icons-extended")
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
+    
+    // Compose Integration
+    implementation("androidx.activity:activity-compose:1.9.3")
+    implementation("androidx.navigation:navigation-compose:2.8.5")
+    
+    // Compose Debug
     debugImplementation("androidx.compose.ui:ui-tooling")
-    // UI Tests
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-    // Optional - Integration with activities
-    implementation("androidx.activity:activity-compose")
-
+    
+    // Testing
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    
+    // Additional utilities
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
+    implementation("androidx.work:work-runtime-ktx:2.10.0")
+    
+    // ViewModel and LiveData
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
+    
+    // Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
+    
+    // Performance monitoring
+    implementation("androidx.tracing:tracing:1.3.0")
 }

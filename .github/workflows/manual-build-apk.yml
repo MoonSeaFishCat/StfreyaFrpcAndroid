@@ -1,0 +1,225 @@
+name: Manual Build APK
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Build Type'
+        required: true
+        default: 'release'
+        type: choice
+        options:
+          - release
+          - debug
+      frp_version:
+        description: 'FRP Version (leave empty for current)'
+        required: false
+        type: string
+      update_kernels:
+        description: 'Update FRP kernels before building'
+        required: true
+        default: true
+        type: boolean
+      sign_apk:
+        description: 'Sign APK with keystore'
+        required: true
+        default: true
+        type: boolean
+      upload_artifact:
+        description: 'Upload APK as artifact'
+        required: true
+        default: true
+        type: boolean
+      create_release:
+        description: 'Create GitHub release'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  BUILD_TYPE: ${{ github.event.inputs.build_type }}
+  FRP_VERSION: ${{ github.event.inputs.frp_version }}
+  UPDATE_KERNELS: ${{ github.event.inputs.update_kernels }}
+  SIGN_APK: ${{ github.event.inputs.sign_apk }}
+  UPLOAD_ARTIFACT: ${{ github.event.inputs.upload_artifact }}
+  CREATE_RELEASE: ${{ github.event.inputs.create_release }}
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+      
+    - name: Cache Gradle packages
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+          
+    - name: Setup Keystore (if signing enabled)
+      if: env.SIGN_APK == 'true'
+      run: |
+        if [ -n "${{ secrets.KEYSTORE_BASE64 }}" ]; then
+          echo "Setting up keystore from secrets"
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > keystore.jks
+          echo "keystore.jks created"
+        else
+          echo "No keystore found in secrets, using example keystore"
+          # 创建示例keystore用于测试
+          keytool -genkey -v -keystore keystore.jks -alias androiddebugkey -keyalg RSA -keysize 2048 -validity 10000 -storepass android -keypass android -dname "CN=Android Debug,O=Android,C=US"
+        fi
+        
+    - name: Update FRP kernels
+      if: env.UPDATE_KERNELS == 'true'
+      run: |
+        chmod +x scripts/build-frp-kernels.sh
+        if [ -n "$FRP_VERSION" ]; then
+          echo "Updating FRP kernels to version: $FRP_VERSION"
+          ./scripts/build-frp-kernels.sh "$FRP_VERSION"
+        else
+          echo "Updating FRP kernels to latest version"
+          ./scripts/build-frp-kernels.sh
+        fi
+        
+    - name: Get current FRP version
+      id: frp-version
+      run: |
+        if [ -f ".frp-version" ]; then
+          FRP_VERSION=$(cat .frp-version)
+        else
+          FRP_VERSION=$(grep 'FrpVersion' app/build.gradle.kts | sed 's/.*"\([^"]*\)".*/\1/')
+        fi
+        echo "frp_version=$FRP_VERSION" >> $GITHUB_OUTPUT
+        echo "Current FRP version: $FRP_VERSION"
+        
+    - name: Build APK
+      run: |
+        echo "Building $BUILD_TYPE APK..."
+        
+        if [ "$SIGN_APK" = "true" ]; then
+          echo "Building signed APK"
+          ./gradlew assemble$BUILD_TYPE
+        else
+          echo "Building unsigned APK"
+          ./gradlew assemble$BUILD_TYPE
+        fi
+        
+        echo "Build completed successfully"
+        
+    - name: List APK files
+      run: |
+        echo "📦 Built APK files:"
+        find app/build/outputs/apk -name "*.apk" -exec ls -lh {} \;
+        
+    - name: Get APK info
+      id: apk-info
+      run: |
+        APK_FILE=$(find app/build/outputs/apk -name "*.apk" | head -1)
+        if [ -n "$APK_FILE" ]; then
+          APK_SIZE=$(stat -c%s "$APK_FILE")
+          APK_SIZE_MB=$(echo "scale=2; $APK_SIZE / 1024 / 1024" | bc)
+          echo "apk_file=$APK_FILE" >> $GITHUB_OUTPUT
+          echo "apk_size=$APK_SIZE" >> $GITHUB_OUTPUT
+          echo "apk_size_mb=$APK_SIZE_MB" >> $GITHUB_OUTPUT
+          echo "APK: $APK_FILE (${APK_SIZE_MB} MB)"
+        else
+          echo "No APK file found"
+          exit 1
+        fi
+        
+    - name: Upload APK artifact
+      if: env.UPLOAD_ARTIFACT == 'true'
+      uses: actions/upload-artifact@v4
+      with:
+        name: stfreya-frpc-${{ env.BUILD_TYPE }}-v${{ steps.frp-version.outputs.frp_version }}
+        path: app/build/outputs/apk/${{ env.BUILD_TYPE }}/*.apk
+        retention-days: 30
+        
+    - name: Create Release
+      if: env.CREATE_RELEASE == 'true'
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: manual-build-${{ env.BUILD_TYPE }}-v${{ steps.frp-version.outputs.frp_version }}
+        name: StfreyaFrpc ${{ env.BUILD_TYPE }} v${{ steps.frp-version.outputs.frp_version }}
+        body: |
+          ## 📱 StfreyaFrpc ${{ env.BUILD_TYPE }} Build
+          
+          ### 🔧 构建信息
+          - **构建类型**: ${{ env.BUILD_TYPE }}
+          - **FRP版本**: ${{ steps.frp-version.outputs.frp_version }}
+          - **构建时间**: ${{ github.run_number }}
+          - **APK大小**: ${{ steps.apk-info.outputs.apk_size_mb }} MB
+          - **签名状态**: ${{ env.SIGN_APK }}
+          
+          ### 📦 下载
+          请下载对应您设备架构的APK文件：
+          - **arm64-v8a**: 64位ARM设备（大多数现代手机）
+          - **armeabi-v7a**: 32位ARM设备（较老的手机）
+          - **x86_64**: 64位x86设备（模拟器、平板等）
+          
+          ### 🚀 安装说明
+          1. 下载APK文件到设备
+          2. 允许安装未知来源应用
+          3. 点击APK文件进行安装
+          4. 打开应用并配置FRP服务
+          
+          ### ⚠️ 注意事项
+          - 请确保设备已开启"开发者选项"和"USB调试"
+          - 首次使用需要授予相关权限
+          - 建议在WiFi环境下使用以获得最佳性能
+          
+          ---
+          *此版本由手动构建工作流创建*
+        files: |
+          app/build/outputs/apk/${{ env.BUILD_TYPE }}/*.apk
+        draft: false
+        prerelease: ${{ env.BUILD_TYPE == 'debug' }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Generate build summary
+      run: |
+        echo "## 📋 构建摘要" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 🔧 构建配置" >> $GITHUB_STEP_SUMMARY
+        echo "- **构建类型**: ${{ env.BUILD_TYPE }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **FRP版本**: ${{ steps.frp-version.outputs.frp_version }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **更新内核**: ${{ env.UPDATE_KERNELS }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **签名APK**: ${{ env.SIGN_APK }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **上传产物**: ${{ env.UPLOAD_ARTIFACT }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **创建Release**: ${{ env.CREATE_RELEASE }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        echo "### 📦 构建结果" >> $GITHUB_STEP_SUMMARY
+        echo "- **APK文件**: ${{ steps.apk-info.outputs.apk_file }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **文件大小**: ${{ steps.apk-info.outputs.apk_size_mb }} MB" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        if [ "${{ env.UPLOAD_ARTIFACT }}" = "true" ]; then
+          echo "✅ **APK已上传为Artifact**" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        if [ "${{ env.CREATE_RELEASE }}" = "true" ]; then
+          echo "✅ **Release已创建**" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📱 支持的架构" >> $GITHUB_STEP_SUMMARY
+        echo "- arm64-v8a (64位ARM)" >> $GITHUB_STEP_SUMMARY
+        echo "- armeabi-v7a (32位ARM)" >> $GITHUB_STEP_SUMMARY
+        echo "- x86_64 (64位x86)" >> $GITHUB_STEP_SUMMARY

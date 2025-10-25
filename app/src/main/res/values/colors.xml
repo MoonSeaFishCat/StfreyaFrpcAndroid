@@ -1,10 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Primary Colors - Modern Blue -->
+    <color name="primary">#1976D2</color>
+    <color name="on_primary">#FFFFFF</color>
+    <color name="primary_container">#1565C0</color>
+    <color name="on_primary_container">#FFFFFF</color>
+    
+    <!-- Secondary Colors - Teal -->
+    <color name="secondary">#00BCD4</color>
+    <color name="on_secondary">#FFFFFF</color>
+    <color name="secondary_container">#0097A7</color>
+    <color name="on_secondary_container">#FFFFFF</color>
+    
+    <!-- Tertiary Colors -->
+    <color name="tertiary">#2196F3</color>
+    <color name="on_tertiary">#FFFFFF</color>
+    
+    <!-- Error Colors -->
+    <color name="error">#BA1A1A</color>
+    <color name="on_error">#FFFFFF</color>
+    <color name="error_container">#FFDAD6</color>
+    <color name="on_error_container">#410002</color>
+    
+    <!-- Surface Colors -->
+    <color name="surface">#FFFBFE</color>
+    <color name="on_surface">#1C1B1F</color>
+    <color name="surface_variant">#F3F0F4</color>
+    <color name="on_surface_variant">#49454F</color>
+    
+    <!-- Background Colors -->
+    <color name="background">#FFFBFE</color>
+    <color name="on_background">#1C1B1F</color>
+    
+    <!-- Outline Colors -->
+    <color name="outline">#79747E</color>
+    <color name="outline_variant">#CAC4D0</color>
+    
+    <!-- Additional Surface Colors -->
+    <color name="surface_inverse">#313033</color>
+    <color name="on_surface_inverse">#F4EFF4</color>
+    <color name="surface_container">#F3F0F4</color>
+    <color name="surface_container_high">#EDE6F2</color>
+    <color name="surface_container_highest">#E8E0EC</color>
+    <color name="surface_container_low">#F7F2FA</color>
+    <color name="surface_container_lowest">#FFFFFF</color>
+    <color name="surface_dim">#DDD8DD</color>
+    <color name="surface_bright">#FFFBFE</color>
+    
+    <!-- Additional Colors -->
+    <color name="scrim">#000000</color>
+    <color name="shadow">#000000</color>
+    <color name="surface_tint">#1976D2</color>
+    
+    <!-- Fixed Colors -->
+    <color name="primary_fixed">#E0E2FF</color>
+    <color name="on_primary_fixed">#001258</color>
+    <color name="primary_fixed_dim">#C1C4FF</color>
+    <color name="on_primary_fixed_variant">#003258</color>
+    
+    <color name="secondary_fixed">#B2EBF2</color>
+    <color name="on_secondary_fixed">#00363A</color>
+    <color name="secondary_fixed_dim">#96E6F0</color>
+    <color name="on_secondary_fixed_variant">#004D52</color>
+    
+    <color name="tertiary_fixed">#BBDEFB</color>
+    <color name="on_tertiary_fixed">#001F3A</color>
+    <color name="tertiary_fixed_dim">#9FCBF7</color>
+    <color name="on_tertiary_fixed_variant">#003258</color>
+    
+    <!-- Status Colors -->
+    <color name="success">#4CAF50</color>
+    <color name="warning">#FF9800</color>
+    <color name="info">#2196F3</color>
+    
+    <!-- Additional Surface Colors for Dark Theme -->
+    <color name="surface_inverse_dark">#313033</color>
+    <color name="on_surface_inverse_dark">#F4EFF4</color>
+    <color name="surface_container_dark">#49454F</color>
+    <color name="surface_container_high_dark">#5A5760</color>
+    <color name="surface_container_highest_dark">#6B6772</color>
+    <color name="surface_container_low_dark">#3F3C44</color>
+    <color name="surface_container_lowest_dark">#2B2930</color>
+    <color name="surface_dim_dark">#DDD8DD</color>
+    <color name="surface_bright_dark">#FFFBFE</color>
+    <color name="scrim_dark">#000000</color>
+    <color name="shadow_dark">#000000</color>
+    <color name="surface_tint_dark">#90CAF9</color>
+    
+    <!-- Fixed Colors for Dark Theme -->
+    <color name="primary_fixed_dark">#E0E2FF</color>
+    <color name="on_primary_fixed_dark">#001258</color>
+    <color name="primary_fixed_dim_dark">#C1C4FF</color>
+    <color name="on_primary_fixed_variant_dark">#003258</color>
+    <color name="secondary_fixed_dark">#B2EBF2</color>
+    <color name="on_secondary_fixed_dark">#00363A</color>
+    <color name="secondary_fixed_dim_dark">#96E6F0</color>
+    <color name="on_secondary_fixed_variant_dark">#004D52</color>
+    <color name="tertiary_fixed_dark">#BBDEFB</color>
+    <color name="on_tertiary_fixed_dark">#001F3A</color>
+    <color name="tertiary_fixed_dim_dark">#9FCBF7</color>
+    <color name="on_tertiary_fixed_variant_dark">#003258</color>
+    
+    <!-- Error Colors for Dark Theme -->
+    <color name="error_dark">#FFB4AB</color>
+    <color name="on_error_dark">#690005</color>
+    <color name="error_container_dark">#93000A</color>
+    <color name="on_error_container_dark">#FFDAD6</color>
 </resources>

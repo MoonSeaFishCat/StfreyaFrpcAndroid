@@ -1,5 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.StfreyaFrpc" parent="Theme.Material3.DayNight">
+        <!-- Customize your dark theme here. -->
+        <item name="colorPrimary">@color/primary_dark</item>
+        <item name="colorOnPrimary">@color/on_primary_dark</item>
+        <item name="colorPrimaryContainer">@color/primary_variant_dark</item>
+        <item name="colorOnPrimaryContainer">@color/on_primary_dark</item>
+        <item name="colorSecondary">@color/secondary_dark</item>
+        <item name="colorOnSecondary">@color/on_secondary_dark</item>
+        <item name="colorSecondaryContainer">@color/secondary_variant_dark</item>
+        <item name="colorOnSecondaryContainer">@color/on_secondary_dark</item>
+        <item name="colorTertiary">@color/tertiary</item>
+        <item name="colorOnTertiary">@color/on_tertiary</item>
+        <item name="colorError">@color/error_dark</item>
+        <item name="colorOnError">@color/on_error_dark</item>
+        <item name="colorErrorContainer">@color/error_container_dark</item>
+        <item name="colorOnErrorContainer">@color/on_error_dark</item>
+        <item name="colorSurface">@color/surface_dark</item>
+        <item name="colorOnSurface">@color/on_surface_dark</item>
+        <item name="colorSurfaceVariant">@color/surface_variant_dark</item>
+        <item name="colorOnSurfaceVariant">@color/on_surface_variant_dark</item>
+        <item name="colorOutline">@color/outline_dark</item>
+        <item name="colorOutlineVariant">@color/outline_variant_dark</item>
+        <item name="colorSurfaceInverse">@color/surface_inverse_dark</item>
+        <item name="colorOnSurfaceInverse">@color/on_surface_inverse_dark</item>
+        <item name="colorSurfaceContainer">@color/surface_container_dark</item>
+        <item name="colorSurfaceContainerHigh">@color/surface_container_high_dark</item>
+        <item name="colorSurfaceContainerHighest">@color/surface_container_highest_dark</item>
+        <item name="colorSurfaceContainerLow">@color/surface_container_low_dark</item>
+        <item name="colorSurfaceContainerLowest">@color/surface_container_lowest_dark</item>
+        <item name="colorSurfaceDim">@color/surface_dim_dark</item>
+        <item name="colorSurfaceBright">@color/surface_bright_dark</item>
+        <item name="colorBackground">@color/background_dark</item>
+        <item name="colorOnBackground">@color/on_background_dark</item>
+        <item name="colorScrim">@color/scrim_dark</item>
+        <item name="colorShadow">@color/shadow_dark</item>
+        <item name="colorSurfaceTint">@color/surface_tint_dark</item>
+        <item name="colorPrimaryFixed">@color/primary_fixed_dark</item>
+        <item name="colorOnPrimaryFixed">@color/on_primary_fixed_dark</item>
+        <item name="colorPrimaryFixedDim">@color/primary_fixed_dim_dark</item>
+        <item name="colorOnPrimaryFixedVariant">@color/on_primary_fixed_variant_dark</item>
+        <item name="colorSecondaryFixed">@color/secondary_fixed_dark</item>
+        <item name="colorOnSecondaryFixed">@color/on_secondary_fixed_dark</item>
+        <item name="colorSecondaryFixedDim">@color/secondary_fixed_dim_dark</item>
+        <item name="colorOnSecondaryFixedVariant">@color/on_secondary_fixed_variant_dark</item>
+        <item name="colorTertiaryFixed">@color/tertiary_fixed_dark</item>
+        <item name="colorOnTertiaryFixed">@color/on_tertiary_fixed_dark</item>
+        <item name="colorTertiaryFixedDim">@color/tertiary_fixed_dim_dark</item>
+        <item name="colorOnTertiaryFixedVariant">@color/on_tertiary_fixed_variant_dark</item>
+    </style>
 
-    <style name="Theme.Frp" parent="android:Theme.Material.NoActionBar" />
+    <style name="Theme.StfreyaFrpc" parent="Base.Theme.StfreyaFrpc" />
 </resources>

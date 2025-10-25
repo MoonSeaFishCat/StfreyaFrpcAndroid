@@ -1,25 +1,104 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name" translatable="false">StfreyaFrpc</string>
+    <string name="frp_for_android" translatable="false">StfreyaFrpc</string>
+    
+    <!-- Main Activity -->
     <string name="auto_start_switch">开机自启动</string>
     <string name="addConfigButton">添加配置</string>
     <string name="aboutButton">关于</string>
-    <string name="frp_log">frp日志</string>
+    <string name="frp_log">frp 日志</string>
     <string name="deleteButton">清除</string>
-    <string name="no_log">无日志</string>
+    <string name="no_log">暂无日志</string>
+    <string name="no_config">暂无配置。点击按钮添加一个！</string>
+    <string name="create_frp_select">选择要创建的 frp 类型</string>
+    
+    <!-- Config Activity -->
     <string name="saveConfigButton">保存</string>
     <string name="dontSaveConfigButton">不保存</string>
     <string name="deleteConfigButton">删除</string>
-    <string name="notification_channel_name">frp后台服务</string>
-    <string name="notification_channel_desc">frp后台服务通知</string>
-    <string name="service_start_toast">已启动frp服务</string>
-    <string name="service_stop_toast">已关闭frp服务</string>
-    <string name="frp_notification_title">frp后台服务</string>
-    <string name="frp_notification_content">已启动%d个frp配置</string>
-    <string name="copy">复制</string>
-    <string name="copied">已复制</string>
-    <string name="no_config">没有配置，点击按钮去添加一个！</string>
     <string name="rename">重命名</string>
     <string name="confirm">确认</string>
     <string name="dismiss">取消</string>
-    <string name="create_frp_select">选择要创建的frp类型</string>
+    <string name="edit_configuration">编辑配置</string>
+    <string name="configuration_editor">配置编辑器</string>
+    <string name="enter_configuration_here">在此输入您的配置...</string>
+    <string name="configuration_saved">配置保存成功</string>
+    <string name="configuration_renamed">配置重命名成功</string>
+    <string name="configuration_copied">配置已复制到剪贴板</string>
+    <string name="save_changes">保存更改？</string>
+    <string name="unsaved_changes">您有未保存的更改。关闭前是否要保存？</string>
+    <string name="save">保存</string>
+    <string name="discard">丢弃</string>
+    <string name="cancel">取消</string>
+    <string name="close">关闭</string>
+    
+    <!-- Status and Overview -->
+    <string name="status_overview">状态概览</string>
+    <string name="frpc_configurations">FRPC 配置</string>
+    <string name="frps_configurations">FRPS 配置</string>
+    <string name="running">运行中</string>
+    <string name="startup_description">开机时自动启动配置</string>
+    <string name="auto_start_description">开机时自动启动此配置</string>
+    
+    <!-- Notifications -->
+    <string name="notification_channel_name">frp 后台服务</string>
+    <string name="notification_channel_desc">frp 后台服务通知</string>
+    <string name="service_start_toast">frp 服务已启动</string>
+    <string name="service_stop_toast">frp 服务已停止</string>
+    <string name="frp_notification_title">frp 后台服务</string>
+    <string name="frp_notification_content">%d 个 frp 配置已启动</string>
+    
+    <!-- Actions -->
+    <string name="copy">复制</string>
+    <string name="copied">已复制</string>
+    <string name="edit">编辑</string>
+    <string name="delete">删除</string>
+    <string name="add">添加</string>
+    <string name="add_configuration">添加配置</string>
+    <string name="tap_to_add">点击 + 按钮创建您的第一个配置</string>
+    
+    <!-- About Activity -->
+    <string name="about">关于</string>
+    <string name="version_information">版本信息</string>
+    <string name="app_version">应用版本</string>
+    <string name="version_code">版本代码</string>
+    <string name="frp_version">FRP 版本</string>
+    <string name="build_type">构建类型</string>
+    <string name="debug">调试版</string>
+    <string name="release">发布版</string>
+    <string name="features">功能特性</string>
+    <string name="links">相关链接</string>
+    <string name="credits">致谢</string>
+    <string name="license">许可证</string>
+    <string name="website">网站</string>
+    <string name="github">GitHub</string>
+    <string name="frp_project">FRP 项目</string>
+    <string name="visit_website">访问我们的网站</string>
+    <string name="view_source_code">查看源代码</string>
+    <string name="original_frp_project">原始 FRP 项目</string>
+    
+    <!-- Feature descriptions -->
+    <string name="frpc_support">运行 FRP 客户端配置</string>
+    <string name="frps_support">运行 FRP 服务端配置</string>
+    <string name="auto_start_feature">开机时启动配置</string>
+    <string name="background_service">可靠的后台执行</string>
+    <string name="modern_ui">Material 3 设计语言</string>
+    <string name="secure">本地配置存储</string>
+    
+    <!-- Credits and License -->
+    <string name="credits_description">此应用基于 fatedier 的优秀 FRP 项目构建。特别感谢 FRP 社区的贡献以及 Android 开发社区的工具和库。</string>
+    <string name="built_with_love">使用 Kotlin、Jetpack Compose 和 Material 3 构建 ❤️</string>
+    <string name="license_description">此项目采用 Apache License 2.0 许可证。FRP 项目同样采用 Apache License 2.0 许可证。</string>
+    
+    <!-- Error messages -->
+    <string name="config_file_not_exist">配置文件不存在</string>
+    <string name="frp_config_null">frp 配置为空</string>
+    <string name="file_not_exist">文件不存在，服务不会启动</string>
+    <string name="frp_already_running">frp 已在运行</string>
+    
+    <!-- Dialog titles -->
+    <string name="choose_config_type">选择配置类型</string>
+    <string name="choose_config_description">选择您要创建的配置类型：</string>
+    <string name="frpc">FRPC</string>
+    <string name="frps">FRPS</string>
 </resources>

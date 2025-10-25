@@ -1,0 +1,221 @@
+name: Auto Update and Release
+
+on:
+  schedule:
+    # 每天北京时间上午9点检查更新
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+    inputs:
+      force_update:
+        description: 'Force update even if no new version'
+        type: boolean
+        default: false
+
+env:
+  FRP_REPO: fatedier/frp
+  CURRENT_VERSION_FILE: .frp-version
+
+jobs:
+  check-and-update:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+      
+    - name: Cache Gradle packages
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+          
+    - name: Get current FRP version
+      id: current-version
+      run: |
+        if [ -f "$CURRENT_VERSION_FILE" ]; then
+          CURRENT_VERSION=$(cat $CURRENT_VERSION_FILE)
+        else
+          # 从build.gradle.kts中提取当前版本
+          CURRENT_VERSION=$(grep 'FrpVersion' app/build.gradle.kts | sed 's/.*"\([^"]*\)".*/\1/')
+        fi
+        echo "current=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+        echo "Current FRP version: $CURRENT_VERSION"
+        
+    - name: Get latest FRP version
+      id: latest-version
+      run: |
+        # 获取最新release版本
+        LATEST_VERSION=$(curl -s "https://api.github.com/repos/$FRP_REPO/releases/latest" | jq -r '.tag_name' | sed 's/v//')
+        echo "latest=$LATEST_VERSION" >> $GITHUB_OUTPUT
+        echo "Latest FRP version: $LATEST_VERSION"
+        
+    - name: Check if update needed
+      id: check-update
+      run: |
+        CURRENT="${{ steps.current-version.outputs.current }}"
+        LATEST="${{ steps.latest-version.outputs.latest }}"
+        FORCE="${{ github.event.inputs.force_update }}"
+        
+        if [ "$FORCE" = "true" ]; then
+          echo "Force update requested"
+          echo "update_needed=true" >> $GITHUB_OUTPUT
+          echo "reason=force_update" >> $GITHUB_OUTPUT
+        elif [ "$CURRENT" != "$LATEST" ]; then
+          echo "Version mismatch: current=$CURRENT, latest=$LATEST"
+          echo "update_needed=true" >> $GITHUB_OUTPUT
+          echo "reason=version_update" >> $GITHUB_OUTPUT
+        else
+          echo "No update needed: current=$CURRENT, latest=$LATEST"
+          echo "update_needed=false" >> $GITHUB_OUTPUT
+          echo "reason=no_update" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: Build FRP kernels
+      if: steps.check-update.outputs.update_needed == 'true'
+      run: |
+        chmod +x scripts/build-frp-kernels.sh
+        ./scripts/build-frp-kernels.sh ${{ steps.latest-version.outputs.latest }}
+        
+    - name: Update version file
+      if: steps.check-update.outputs.update_needed == 'true'
+      run: |
+        echo "${{ steps.latest-version.outputs.latest }}" > $CURRENT_VERSION_FILE
+        
+    - name: Build APK
+      if: steps.check-update.outputs.update_needed == 'true'
+      run: |
+        ./gradlew assembleRelease
+        
+    - name: Upload APK artifact
+      if: steps.check-update.outputs.update_needed == 'true'
+      uses: actions/upload-artifact@v4
+      with:
+        name: stfreya-frpc-v${{ steps.latest-version.outputs.latest }}
+        path: app/build/outputs/apk/release/*.apk
+        retention-days: 30
+        
+    - name: Create Release
+      if: steps.check-update.outputs.update_needed == 'true'
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v${{ steps.latest-version.outputs.latest }}
+        name: StfreyaFrpc v${{ steps.latest-version.outputs.latest }}
+        body: |
+          ## 🚀 StfreyaFrpc v${{ steps.latest-version.outputs.latest }}
+          
+          ### 📦 更新内容
+          - **FRP内核更新**: 升级到 frp v${{ steps.latest-version.outputs.latest }}
+          - **自动构建**: 通过GitHub Actions自动构建
+          - **多架构支持**: arm64-v8a, armeabi-v7a, x86_64
+          
+          ### 🔧 技术细节
+          - **FRP版本**: ${{ steps.latest-version.outputs.latest }}
+          - **构建时间**: ${{ github.run_number }}
+          - **触发原因**: ${{ steps.check-update.outputs.reason }}
+          
+          ### 📱 安装说明
+          1. 下载对应架构的APK文件
+          2. 允许安装未知来源应用
+          3. 安装并配置FRP服务
+          
+          ### 🔗 相关链接
+          - [FRP官方仓库](https://github.com/fatedier/frp)
+          - [FRP v${{ steps.latest-version.outputs.latest }} Release](https://github.com/fatedier/frp/releases/tag/v${{ steps.latest-version.outputs.latest }})
+          - [项目文档](https://github.com/${{ github.repository }})
+          
+          ---
+          *此版本由GitHub Actions自动构建和发布*
+        files: |
+          app/build/outputs/apk/release/*.apk
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Commit changes
+      if: steps.check-update.outputs.update_needed == 'true'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        
+        git add app/src/main/jniLibs/
+        git add app/build.gradle.kts
+        git add $CURRENT_VERSION_FILE
+        
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "🤖 Auto-update: Upgrade FRP to v${{ steps.latest-version.outputs.latest }}"
+          git push
+        fi
+        
+    - name: Create Issue for manual review
+      if: steps.check-update.outputs.update_needed == 'true' && steps.check-update.outputs.reason == 'version_update'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { data: issue } = await github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: `🤖 Auto-update: FRP upgraded to v${{ steps.latest-version.outputs.latest }}`,
+            body: `## 自动更新通知
+            
+            FRP内核已自动升级到最新版本 **v${{ steps.latest-version.outputs.latest }}**
+            
+            ### 更新详情
+            - **原版本**: ${{ steps.current-version.outputs.current }}
+            - **新版本**: ${{ steps.latest-version.outputs.latest }}
+            - **更新时间**: ${new Date().toISOString()}
+            - **Release**: [v${{ steps.latest-version.outputs.latest }}](https://github.com/fatedier/frp/releases/tag/v${{ steps.latest-version.outputs.latest }})
+            
+            ### 验证清单
+            - [ ] 测试新版本功能
+            - [ ] 验证配置文件兼容性
+            - [ ] 检查性能表现
+            - [ ] 确认稳定性
+            
+            ### 相关链接
+            - [Release页面](https://github.com/${{ github.repository }}/releases/tag/v${{ steps.latest-version.outputs.latest }})
+            - [FRP更新日志](https://github.com/fatedier/frp/releases/tag/v${{ steps.latest-version.outputs.latest }})
+            
+            ---
+            *此Issue由自动更新工作流创建*`,
+            labels: ['auto-update', 'frp-upgrade', 'needs-review']
+          });
+          
+          console.log(`Created issue #${issue.number} for FRP upgrade review`);
+          
+    - name: Summary
+      run: |
+        echo "## 📋 更新检查结果" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "- **当前版本**: ${{ steps.current-version.outputs.current }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **最新版本**: ${{ steps.latest-version.outputs.latest }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **更新状态**: ${{ steps.check-update.outputs.update_needed }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **触发原因**: ${{ steps.check-update.outputs.reason }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        if [ "${{ steps.check-update.outputs.update_needed }}" = "true" ]; then
+          echo "✅ **已执行更新流程**" >> $GITHUB_STEP_SUMMARY
+          echo "- FRP内核已更新" >> $GITHUB_STEP_SUMMARY
+          echo "- APK已构建" >> $GITHUB_STEP_SUMMARY
+          echo "- Release已发布" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "ℹ️ **无需更新**" >> $GITHUB_STEP_SUMMARY
+          echo "当前版本已是最新" >> $GITHUB_STEP_SUMMARY
+        fi

@@ -1,26 +1,104 @@
 <resources>
-    <string name="app_name" translatable="false">frp</string>
-    <string name="frp_for_android" translatable="false">frp for Android</string>
+    <string name="app_name" translatable="false">StfreyaFrpc</string>
+    <string name="frp_for_android" translatable="false">StfreyaFrpc</string>
+    
+    <!-- Main Activity -->
     <string name="auto_start_switch">Startup at Boot</string>
     <string name="addConfigButton">Add Config</string>
     <string name="aboutButton">About</string>
     <string name="frp_log">frp Log</string>
     <string name="deleteButton">Clear</string>
     <string name="no_log">No Log</string>
+    <string name="no_config">No Config. Click button to add one!</string>
+    <string name="create_frp_select">Select the type of frp to create</string>
+    
+    <!-- Config Activity -->
     <string name="saveConfigButton">Save</string>
     <string name="dontSaveConfigButton">Don\'t Save</string>
     <string name="deleteConfigButton">Delete</string>
+    <string name="rename">Rename</string>
+    <string name="confirm">Confirm</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="edit_configuration">Edit Configuration</string>
+    <string name="configuration_editor">Configuration Editor</string>
+    <string name="enter_configuration_here">Enter your configuration here...</string>
+    <string name="configuration_saved">Configuration saved successfully</string>
+    <string name="configuration_renamed">Configuration renamed successfully</string>
+    <string name="configuration_copied">Configuration copied to clipboard</string>
+    <string name="save_changes">Save Changes?</string>
+    <string name="unsaved_changes">You have unsaved changes. Do you want to save them before closing?</string>
+    <string name="save">Save</string>
+    <string name="discard">Discard</string>
+    <string name="cancel">Cancel</string>
+    <string name="close">Close</string>
+    
+    <!-- Status and Overview -->
+    <string name="status_overview">Status Overview</string>
+    <string name="frpc_configurations">FRPC Configurations</string>
+    <string name="frps_configurations">FRPS Configurations</string>
+    <string name="running">Running</string>
+    <string name="startup_description">Start configurations automatically on boot</string>
+    <string name="auto_start_description">Start this configuration automatically on boot</string>
+    
+    <!-- Notifications -->
     <string name="notification_channel_name">frp Background Service</string>
     <string name="notification_channel_desc">frp Background Service Notification</string>
     <string name="service_start_toast">frp Service Started</string>
     <string name="service_stop_toast">frp Service Stopped</string>
     <string name="frp_notification_title">frp Background Service</string>
     <string name="frp_notification_content">%d frp Config Started</string>
+    
+    <!-- Actions -->
     <string name="copy">Copy</string>
     <string name="copied">Copied</string>
-    <string name="no_config">No Config. Click button to add one!</string>
-    <string name="rename">Rename</string>
-    <string name="confirm">Confirm</string>
-    <string name="dismiss">Dismiss</string>
-    <string name="create_frp_select">Select the type of frp to create</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="add">Add</string>
+    <string name="add_configuration">Add Configuration</string>
+    <string name="tap_to_add">Tap the + button to create your first configuration</string>
+    
+    <!-- About Activity -->
+    <string name="about">About</string>
+    <string name="version_information">Version Information</string>
+    <string name="app_version">App Version</string>
+    <string name="version_code">Version Code</string>
+    <string name="frp_version">FRP Version</string>
+    <string name="build_type">Build Type</string>
+    <string name="debug">Debug</string>
+    <string name="release">Release</string>
+    <string name="features">Features</string>
+    <string name="links">Links</string>
+    <string name="credits">Credits</string>
+    <string name="license">License</string>
+    <string name="website">Website</string>
+    <string name="github">GitHub</string>
+    <string name="frp_project">FRP Project</string>
+    <string name="visit_website">Visit our website</string>
+    <string name="view_source_code">View source code</string>
+    <string name="original_frp_project">Original FRP project</string>
+    
+    <!-- Feature descriptions -->
+    <string name="frpc_support">Run FRP client configurations</string>
+    <string name="frps_support">Run FRP server configurations</string>
+    <string name="auto_start_feature">Start configurations on boot</string>
+    <string name="background_service">Reliable background execution</string>
+    <string name="modern_ui">Material 3 design language</string>
+    <string name="secure">Local configuration storage</string>
+    
+    <!-- Credits and License -->
+    <string name="credits_description">This app is built on top of the excellent FRP project by fatedier. Special thanks to the FRP community for their contributions and the Android development community for their tools and libraries.</string>
+    <string name="built_with_love">Built with ❤️ using Kotlin, Jetpack Compose, and Material 3</string>
+    <string name="license_description">This project is licensed under the Apache License 2.0. The FRP project is licensed under the Apache License 2.0 as well.</string>
+    
+    <!-- Error messages -->
+    <string name="config_file_not_exist">Config file does not exist</string>
+    <string name="frp_config_null">frp config is null</string>
+    <string name="file_not_exist">file is not exist,service won\'t start</string>
+    <string name="frp_already_running">frp is already running</string>
+    
+    <!-- Dialog titles -->
+    <string name="choose_config_type">Choose Configuration Type</string>
+    <string name="choose_config_description">Choose the type of configuration you want to create:</string>
+    <string name="frpc">FRPC</string>
+    <string name="frps">FRPS</string>
 </resources>
