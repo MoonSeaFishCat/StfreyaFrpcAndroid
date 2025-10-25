@@ -67,7 +67,11 @@ fun ConfigHelpDialog(
                                 ServiceType.HTTP -> "将内网网站服务暴露到公网，让外网用户可以访问您的网站"
                                 ServiceType.SSH -> "通过公网SSH连接到内网设备，进行远程管理"
                                 ServiceType.RDP -> "通过公网远程桌面连接到内网Windows设备"
-                                ServiceType.CUSTOM -> "其他TCP/UDP服务的内网穿透"
+                                ServiceType.TCP -> "其他TCP服务的内网穿透"
+                                ServiceType.UDP -> "UDP服务的内网穿透"
+                                ServiceType.HTTPS -> "HTTPS网站服务的内网穿透"
+                                ServiceType.STCP -> "安全TCP点对点连接"
+                                ServiceType.SUDP -> "安全UDP点对点连接"
                             }
                         )
                     }
@@ -242,7 +246,11 @@ fun ServiceHelpItem(
                 ServiceType.HTTP -> Icons.Default.Web
                 ServiceType.SSH -> Icons.Default.Terminal
                 ServiceType.RDP -> Icons.Default.DesktopWindows
-                ServiceType.CUSTOM -> Icons.Default.Settings
+                ServiceType.TCP -> Icons.Default.Settings
+                ServiceType.UDP -> Icons.Default.NetworkCheck
+                ServiceType.HTTPS -> Icons.Default.Lock
+                ServiceType.STCP -> Icons.Default.Security
+                ServiceType.SUDP -> Icons.Default.Security
             },
             contentDescription = null,
             tint = MaterialTheme.colorScheme.primary,
