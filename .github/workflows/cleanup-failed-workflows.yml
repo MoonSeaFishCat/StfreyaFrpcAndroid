@@ -1,0 +1,185 @@
+name: Cleanup Failed Workflows
+
+on:
+  workflow_dispatch:
+    inputs:
+      workflow_name:
+        description: 'Workflow name to cleanup (leave empty for all)'
+        required: false
+        type: string
+      days_old:
+        description: 'Cleanup workflows older than X days'
+        required: true
+        default: 7
+        type: number
+      dry_run:
+        description: 'Dry run (only show what would be deleted)'
+        required: true
+        default: true
+        type: boolean
+
+jobs:
+  cleanup-failed-workflows:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
+    
+    steps:
+    - name: Cleanup failed workflows
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { workflow_name, days_old, dry_run } = ${{ github.event.inputs }};
+          const cutoffDate = new Date();
+          cutoffDate.setDate(cutoffDate.getDate() - parseInt(days_old));
+          
+          console.log(`Cleaning up failed workflows older than ${days_old} days (before ${cutoffDate.toISOString()})`);
+          if (dry_run === 'true') {
+            console.log('DRY RUN MODE - No workflows will be deleted');
+          }
+          
+          try {
+            // Get all workflows
+            const workflows = await github.rest.actions.listWorkflowsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+            
+            let totalDeleted = 0;
+            let totalSkipped = 0;
+            
+            for (const workflow of workflows.data.workflows) {
+              // Skip if specific workflow name is provided and doesn't match
+              if (workflow_name && workflow.name !== workflow_name) {
+                continue;
+              }
+              
+              console.log(`\nProcessing workflow: ${workflow.name} (ID: ${workflow.id})`);
+              
+              // Get workflow runs
+              const runs = await github.rest.actions.listWorkflowRuns({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id: workflow.id,
+                status: 'completed',
+                conclusion: 'failure',
+                per_page: 100
+              });
+              
+              for (const run of runs.data.workflow_runs) {
+                const runDate = new Date(run.created_at);
+                
+                // Skip if run is newer than cutoff date
+                if (runDate > cutoffDate) {
+                  totalSkipped++;
+                  continue;
+                }
+                
+                console.log(`  - Run ${run.id} (${run.created_at}): ${run.conclusion} - ${run.status}`);
+                
+                if (dry_run !== 'true') {
+                  try {
+                    await github.rest.actions.deleteWorkflowRun({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      run_id: run.id
+                    });
+                    console.log(`    ✓ Deleted run ${run.id}`);
+                    totalDeleted++;
+                  } catch (error) {
+                    console.log(`    ✗ Failed to delete run ${run.id}: ${error.message}`);
+                  }
+                } else {
+                  console.log(`    [DRY RUN] Would delete run ${run.id}`);
+                  totalDeleted++;
+                }
+              }
+            }
+            
+            console.log(`\n=== Cleanup Summary ===`);
+            console.log(`Total runs processed: ${totalDeleted + totalSkipped}`);
+            console.log(`Runs deleted/skipped: ${totalDeleted}/${totalSkipped}`);
+            
+            if (dry_run === 'true') {
+              console.log('\nThis was a dry run. Set dry_run to false to actually delete workflows.');
+            }
+            
+          } catch (error) {
+            console.error('Error during cleanup:', error);
+            core.setFailed(error.message);
+          }
+
+  cleanup-running-workflows:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
+    
+    steps:
+    - name: Cancel running workflows
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { workflow_name } = ${{ github.event.inputs }};
+          
+          console.log('Cancelling running workflows...');
+          if (workflow_name) {
+            console.log(`Target workflow: ${workflow_name}`);
+          }
+          
+          try {
+            // Get all workflows
+            const workflows = await github.rest.actions.listWorkflowsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+            
+            let totalCancelled = 0;
+            
+            for (const workflow of workflows.data.workflows) {
+              // Skip if specific workflow name is provided and doesn't match
+              if (workflow_name && workflow.name !== workflow_name) {
+                continue;
+              }
+              
+              // Skip the current workflow
+              if (workflow.id === context.payload.workflow.id) {
+                continue;
+              }
+              
+              console.log(`\nProcessing workflow: ${workflow.name} (ID: ${workflow.id})`);
+              
+              // Get running workflow runs
+              const runs = await github.rest.actions.listWorkflowRuns({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id: workflow.id,
+                status: 'in_progress',
+                per_page: 100
+              });
+              
+              for (const run of runs.data.workflow_runs) {
+                console.log(`  - Cancelling run ${run.id} (${run.created_at})`);
+                
+                try {
+                  await github.rest.actions.cancelWorkflowRun({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    run_id: run.id
+                  });
+                  console.log(`    ✓ Cancelled run ${run.id}`);
+                  totalCancelled++;
+                } catch (error) {
+                  console.log(`    ✗ Failed to cancel run ${run.id}: ${error.message}`);
+                }
+              }
+            }
+            
+            console.log(`\n=== Cancellation Summary ===`);
+            console.log(`Total runs cancelled: ${totalCancelled}`);
+            
+          } catch (error) {
+            console.error('Error during cancellation:', error);
+            core.setFailed(error.message);
+          }
