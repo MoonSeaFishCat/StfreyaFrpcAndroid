@@ -157,7 +157,7 @@ jobs:
         echo "Created keystore.properties file"
         
     - name: Setup Keystore (if signing enabled)
-      if: env.SIGN_APK == 'true'
+      if: ${{ env.SIGN_APK == 'true' }}
       run: |
         if [ -n "${{ secrets.KEYSTORE_BASE64 }}" ]; then
           echo "Setting up keystore from secrets"
@@ -170,7 +170,7 @@ jobs:
         fi
         
     - name: Update FRP kernels
-      if: env.UPDATE_KERNELS == 'true'
+      if: ${{ env.UPDATE_KERNELS == 'true' }}
       run: |
         chmod +x scripts/build-frp-kernels.sh
         if [ -n "$FRP_VERSION" ]; then
@@ -237,7 +237,7 @@ jobs:
         fi
         
     - name: Upload APK artifact
-      if: env.UPLOAD_ARTIFACT == 'true'
+      if: ${{ env.UPLOAD_ARTIFACT == 'true' }}
       uses: actions/upload-artifact@v4
       with:
         name: stfreya-frpc-${{ env.BUILD_TYPE }}-v${{ steps.frp-version.outputs.frp_version }}
@@ -245,7 +245,7 @@ jobs:
         retention-days: 30
         
     - name: Create Release
-      if: env.CREATE_RELEASE == 'true'
+      if: ${{ env.CREATE_RELEASE == 'true' }}
       uses: softprops/action-gh-release@v1
       with:
         tag_name: manual-build-${{ env.BUILD_TYPE }}-v${{ steps.frp-version.outputs.frp_version }}

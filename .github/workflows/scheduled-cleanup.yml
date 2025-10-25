@@ -152,7 +152,7 @@ jobs:
     permissions:
       actions: write
       contents: read
-    if: ${{ !env.DRY_RUN }}
+    if: ${{ github.event.inputs.dry_run != 'true' }}
     
     steps:
     - name: Cleanup old successful workflows
