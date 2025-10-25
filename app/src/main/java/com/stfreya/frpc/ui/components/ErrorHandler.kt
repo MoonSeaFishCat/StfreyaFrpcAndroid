@@ -131,7 +131,7 @@ fun SuccessMessage(
             IconButton(onClick = onDismiss) {
                 Icon(
                     Icons.Default.Close,
-                    contentDescription = "Dismiss",
+                    contentDescription = stringResource(R.string.dismiss),
                     tint = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
@@ -170,7 +170,7 @@ fun WarningMessage(
             IconButton(onClick = onDismiss) {
                 Icon(
                     Icons.Default.Close,
-                    contentDescription = "Dismiss",
+                    contentDescription = stringResource(R.string.dismiss),
                     tint = MaterialTheme.colorScheme.onSecondaryContainer
                 )
             }
@@ -209,7 +209,7 @@ fun InfoMessage(
             IconButton(onClick = onDismiss) {
                 Icon(
                     Icons.Default.Close,
-                    contentDescription = "Dismiss",
+                    contentDescription = stringResource(R.string.dismiss),
                     tint = MaterialTheme.colorScheme.onTertiaryContainer
                 )
             }

@@ -243,7 +243,7 @@ class MainActivity : ComponentActivity() {
                 if (frpcConfigList.isNotEmpty()) {
                     item {
                         ConfigSectionHeader(
-                            title = "FRPC Configurations",
+                            title = stringResource(R.string.frpc_configurations),
                             icon = Icons.Default.CloudUpload,
                             count = frpcConfigList.size
                         )
@@ -265,7 +265,7 @@ class MainActivity : ComponentActivity() {
                 if (frpsConfigList.isNotEmpty()) {
                     item {
                         ConfigSectionHeader(
-                            title = "FRPS Configurations",
+                            title = stringResource(R.string.frps_configurations),
                             icon = Icons.Default.CloudDownload,
                             count = frpsConfigList.size
                         )
@@ -319,7 +319,11 @@ class MainActivity : ComponentActivity() {
                 onConfigGenerated = { configText ->
                     // 创建新配置
                     val configName = "wizard_config_${System.currentTimeMillis()}.toml"
-                    val configFile = File(filesDir, configName)
+                    val frpcDir = FrpType.FRPC.getDir(this@MainActivity)
+                    if (!frpcDir.exists()) {
+                        frpcDir.mkdirs()
+                    }
+                    val configFile = File(frpcDir, configName)
                     configFile.writeText(configText)
                     
                     val frpConfig = FrpConfig(
@@ -438,13 +442,13 @@ class MainActivity : ComponentActivity() {
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     StatusItem(
-                        label = "FRPC",
+                        label = stringResource(R.string.frpc),
                         count = frpcCount,
                         icon = Icons.Default.CloudUpload,
                         color = MaterialTheme.colorScheme.primary
                     )
                     StatusItem(
-                        label = "FRPS",
+                        label = stringResource(R.string.frps),
                         count = frpsCount,
                         icon = Icons.Default.CloudDownload,
                         color = MaterialTheme.colorScheme.secondary
@@ -744,7 +748,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         Icon(Icons.Default.CloudUpload, contentDescription = null)
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("FRPC")
+                        Text(stringResource(R.string.frpc))
                     }
                     OutlinedButton(
                         onClick = onFrpsSelected,
@@ -754,7 +758,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         Icon(Icons.Default.CloudDownload, contentDescription = null)
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("FRPS")
+                        Text(stringResource(R.string.frps))
                     }
                 }
             },

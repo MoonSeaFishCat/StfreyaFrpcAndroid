@@ -111,9 +111,9 @@ app/src/androidTest/java/com/stfreya/frpc/
 
 ## 许可证
 
-本项目采用 Apache License 2.0 许可证。
+本项目采用 GNU Affero General Public License v3.0 (AGPLv3) 许可证。
 
-FRP 项目同样采用 Apache License 2.0 许可证。
+FRP 项目采用 Apache License 2.0 许可证。
 
 ## 致谢
 

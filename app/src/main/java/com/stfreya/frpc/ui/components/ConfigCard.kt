@@ -180,13 +180,13 @@ fun StatusOverviewCard(
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 StatusItem(
-                    label = "FRPC",
+                    label = stringResource(R.string.frpc),
                     count = frpcCount,
                     icon = Icons.Default.CloudUpload,
                     color = MaterialTheme.colorScheme.primary
                 )
                 StatusItem(
-                    label = "FRPS",
+                    label = stringResource(R.string.frps),
                     count = frpsCount,
                     icon = Icons.Default.CloudDownload,
                     color = MaterialTheme.colorScheme.secondary

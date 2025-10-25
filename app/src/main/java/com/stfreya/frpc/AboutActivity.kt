@@ -46,14 +46,14 @@ class AboutActivity : ComponentActivity() {
                 TopAppBar(
                     title = {
                         Text(
-                            text = "About",
+                            text = stringResource(R.string.about),
                             style = MaterialTheme.typography.headlineSmall,
                             fontWeight = FontWeight.Bold
                         )
                     },
                     navigationIcon = {
                         IconButton(onClick = { finish() }) {
-                            Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                            Icon(Icons.Default.ArrowBack, contentDescription = stringResource(R.string.back))
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
@@ -145,21 +145,21 @@ class AboutActivity : ComponentActivity() {
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "StfreyaFrpc",
+                    text = stringResource(R.string.app_name),
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Modern FRP Client for Android",
+                    text = stringResource(R.string.app_subtitle),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Fast, reliable, and easy-to-use",
+                    text = stringResource(R.string.app_description),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f),
                     textAlign = TextAlign.Center
@@ -180,30 +180,30 @@ class AboutActivity : ComponentActivity() {
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text(
-                    text = "Version Information",
+                    text = stringResource(R.string.version_information),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 
                 InfoRow(
-                    label = "App Version",
+                    label = stringResource(R.string.app_version),
                     value = BuildConfig.VERSION_NAME,
                     icon = Icons.Default.Info
                 )
                 InfoRow(
-                    label = "Version Code",
+                    label = stringResource(R.string.version_code),
                     value = BuildConfig.VERSION_CODE.toString(),
                     icon = Icons.Default.Tag
                 )
                 InfoRow(
-                    label = "FRP Version",
+                    label = stringResource(R.string.frp_version),
                     value = BuildConfig.FrpVersion,
                     icon = Icons.Default.CloudSync
                 )
                 InfoRow(
-                    label = "Build Type",
-                    value = if (BuildConfig.DEBUG) "Debug" else "Release",
+                    label = stringResource(R.string.build_type),
+                    value = if (BuildConfig.DEBUG) stringResource(R.string.debug) else stringResource(R.string.release),
                     icon = Icons.Default.Build
                 )
             }
@@ -222,7 +222,7 @@ class AboutActivity : ComponentActivity() {
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text(
-                    text = "Features",
+                    text = stringResource(R.string.features),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -230,33 +230,33 @@ class AboutActivity : ComponentActivity() {
                 
                 FeatureItem(
                     icon = Icons.Default.CloudUpload,
-                    title = "FRPC Support",
-                    description = "Run FRP client configurations"
+                    title = stringResource(R.string.frpc_support),
+                    description = stringResource(R.string.frpc_support_desc)
                 )
                 FeatureItem(
                     icon = Icons.Default.CloudDownload,
-                    title = "FRPS Support",
-                    description = "Run FRP server configurations"
+                    title = stringResource(R.string.frps_support),
+                    description = stringResource(R.string.frps_support_desc)
                 )
                 FeatureItem(
                     icon = Icons.Default.PowerSettingsNew,
-                    title = "Auto Start",
-                    description = "Start configurations on boot"
+                    title = stringResource(R.string.auto_start),
+                    description = stringResource(R.string.auto_start_desc)
                 )
                 FeatureItem(
                     icon = Icons.Default.Notifications,
-                    title = "Background Service",
-                    description = "Reliable background execution"
+                    title = stringResource(R.string.background_service),
+                    description = stringResource(R.string.background_service_desc)
                 )
                 FeatureItem(
                     icon = Icons.Default.Palette,
-                    title = "Modern UI",
-                    description = "Material 3 design language"
+                    title = stringResource(R.string.modern_ui),
+                    description = stringResource(R.string.modern_ui_desc)
                 )
                 FeatureItem(
                     icon = Icons.Default.Security,
-                    title = "Secure",
-                    description = "Local configuration storage"
+                    title = stringResource(R.string.secure),
+                    description = stringResource(R.string.secure_desc)
                 )
             }
         }
@@ -278,7 +278,7 @@ class AboutActivity : ComponentActivity() {
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text(
-                    text = "Links",
+                    text = stringResource(R.string.links),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -286,20 +286,20 @@ class AboutActivity : ComponentActivity() {
                 
                 LinkItem(
                     icon = Icons.Default.Language,
-                    title = "Website",
-                    description = "Visit our website",
+                    title = stringResource(R.string.website),
+                    description = stringResource(R.string.website_desc),
                     onClick = onWebsiteClick
                 )
                 LinkItem(
                     icon = Icons.Default.Code,
-                    title = "GitHub",
-                    description = "View source code",
+                    title = stringResource(R.string.github),
+                    description = stringResource(R.string.github_desc),
                     onClick = onGitHubClick
                 )
                 LinkItem(
                     icon = Icons.Default.CloudSync,
-                    title = "FRP Project",
-                    description = "Original FRP project",
+                    title = stringResource(R.string.frp_project),
+                    description = stringResource(R.string.frp_project_desc),
                     onClick = onFrpClick
                 )
             }
@@ -318,20 +318,20 @@ class AboutActivity : ComponentActivity() {
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text(
-                    text = "Credits",
+                    text = stringResource(R.string.credits),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 
                 Text(
-                    text = "This app is built on top of the excellent FRP project by fatedier. Special thanks to the FRP community for their contributions and the Android development community for their tools and libraries.",
+                    text = stringResource(R.string.credits_content),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Built with ❤️ using Kotlin, Jetpack Compose, and Material 3",
+                    text = stringResource(R.string.built_with),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
@@ -352,14 +352,14 @@ class AboutActivity : ComponentActivity() {
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text(
-                    text = "License",
+                    text = stringResource(R.string.license),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 
                 Text(
-                    text = "This project is licensed under the Apache License 2.0. The FRP project is licensed under the Apache License 2.0 as well.",
+                    text = stringResource(R.string.license_content),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
