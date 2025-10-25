@@ -1,45 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Custom attributes for the app -->
+    <!-- Custom attributes for the app - only define what's not in Material3 -->
     <attr name="colorBackground" format="color|reference" />
     <attr name="colorScrim" format="color|reference" />
     <attr name="colorShadow" format="color|reference" />
     <attr name="colorSurfaceTint" format="color|reference" />
-    
-    <!-- Material 3 color attributes -->
-    <attr name="primary" format="color|reference" />
-    <attr name="onPrimary" format="color|reference" />
-    <attr name="primaryContainer" format="color|reference" />
-    <attr name="onPrimaryContainer" format="color|reference" />
-    
-    <attr name="secondary" format="color|reference" />
-    <attr name="onSecondary" format="color|reference" />
-    <attr name="secondaryContainer" format="color|reference" />
-    <attr name="onSecondaryContainer" format="color|reference" />
-    
-    <attr name="tertiary" format="color|reference" />
-    <attr name="onTertiary" format="color|reference" />
-    <attr name="tertiaryContainer" format="color|reference" />
-    <attr name="onTertiaryContainer" format="color|reference" />
-    
-    <attr name="error" format="color|reference" />
-    <attr name="onError" format="color|reference" />
-    <attr name="errorContainer" format="color|reference" />
-    <attr name="onErrorContainer" format="color|reference" />
-    
-    <attr name="surface" format="color|reference" />
-    <attr name="onSurface" format="color|reference" />
-    <attr name="surfaceVariant" format="color|reference" />
-    <attr name="onSurfaceVariant" format="color|reference" />
-    
-    <attr name="background" format="color|reference" />
-    <attr name="onBackground" format="color|reference" />
-    
-    <attr name="outline" format="color|reference" />
-    <attr name="outlineVariant" format="color|reference" />
-    
-    <!-- Scrim and shadow -->
-    <attr name="scrim" format="color|reference" />
-    <attr name="shadow" format="color|reference" />
-    <attr name="surfaceTint" format="color|reference" />
 </resources>
