@@ -308,7 +308,8 @@ class MainActivity : ComponentActivity() {
                     )
                     
                     // 添加到配置列表
-                    val newList = frpcConfigList.value.toMutableList()
+                    val currentList: List<FrpConfig> = frpcConfigList.value
+                    val newList = currentList.toMutableList()
                     newList.add(frpConfig)
                     frpcConfigList.value = newList
                     
