@@ -43,7 +43,7 @@ fun ErrorSnackbar(
                     tint = MaterialTheme.colorScheme.onErrorContainer
                 )
                 androidx.compose.foundation.layout.Spacer(modifier = Modifier.width(8.dp))
-                androidx.compose.ui.text.Text(
+                Text(
                     text = errorMessage,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onErrorContainer,
@@ -83,7 +83,7 @@ fun LoadingIndicator(
                     color = MaterialTheme.colorScheme.primary
                 )
                 androidx.compose.foundation.layout.Spacer(modifier = Modifier.width(12.dp))
-                androidx.compose.ui.text.Text(
+                Text(
                     text = message,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -120,7 +120,7 @@ fun SuccessMessage(
                 tint = MaterialTheme.colorScheme.onPrimaryContainer
             )
             androidx.compose.foundation.layout.Spacer(modifier = Modifier.width(8.dp))
-            androidx.compose.ui.text.Text(
+            Text(
                 text = message,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -159,7 +159,7 @@ fun WarningMessage(
                 tint = MaterialTheme.colorScheme.onSecondaryContainer
             )
             androidx.compose.foundation.layout.Spacer(modifier = Modifier.width(8.dp))
-            androidx.compose.ui.text.Text(
+            Text(
                 text = message,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
@@ -198,7 +198,7 @@ fun InfoMessage(
                 tint = MaterialTheme.colorScheme.onTertiaryContainer
             )
             androidx.compose.foundation.layout.Spacer(modifier = Modifier.width(8.dp))
-            androidx.compose.ui.text.Text(
+            Text(
                 text = message,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onTertiaryContainer,

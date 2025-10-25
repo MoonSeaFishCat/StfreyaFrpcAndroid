@@ -26,6 +26,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Copy
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -58,7 +59,7 @@ val Warning = Color(0xFFFF9800)
 val Error = Color(0xFFF44336)
 
 class MainActivity : ComponentActivity() {
-    private val isStartup = MutableStateFlow(false)
+    private var isStartup = MutableStateFlow(false)
     private val logText = MutableStateFlow("")
     private val frpcConfigList = MutableStateFlow<List<FrpConfig>>(emptyList())
     private val frpsConfigList = MutableStateFlow<List<FrpConfig>>(emptyList())
@@ -692,7 +693,7 @@ class MainActivity : ComponentActivity() {
                             onClick = onCopy,
                             modifier = Modifier.weight(1f)
                         ) {
-                            Icon(Icons.Default.Copy, contentDescription = null)
+                            Icon(Icons.Outlined.Copy, contentDescription = null)
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(stringResource(R.string.copy))
                         }
