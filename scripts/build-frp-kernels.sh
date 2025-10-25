@@ -28,7 +28,11 @@ ABIS=("linux_amd64" "linux_arm64" "linux_arm")
 for abi in "${ABIS[@]}"; do
     echo "📦 Processing ABI: $abi"
     
-    # 构建下载URL
+    # 构建下载URL - 确保版本号格式正确
+    if [[ "$FRP_VERSION" =~ ^[0-9]+\.[0-9]+$ ]]; then
+        # 如果版本号只有主版本.次版本，添加.0补丁版本
+        FRP_VERSION="${FRP_VERSION}.0"
+    fi
     FRP_URL="https://github.com/fatedier/frp/releases/download/v${FRP_VERSION}/frp_${FRP_VERSION}_${abi}.tar.gz"
     echo "⬇️  Downloading from: $FRP_URL"
     

@@ -107,6 +107,9 @@ jobs:
         echo "frp_version=$FRP_VERSION" >> $GITHUB_OUTPUT
         echo "Current FRP version: $FRP_VERSION"
         
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+      
     - name: Build APK
       run: |
         echo "Building $BUILD_TYPE APK..."
