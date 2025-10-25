@@ -122,7 +122,7 @@ private fun ConfigActions(
         ) {
             Icon(
                 Icons.Default.Edit,
-                contentDescription = stringResource(R.string.edit),
+                contentDescription = androidx.compose.ui.res.stringResource(R.string.edit),
                 tint = if (isRunning) 
                     MaterialTheme.colorScheme.onSurfaceVariant 
                 else 
@@ -135,7 +135,7 @@ private fun ConfigActions(
         ) {
             Icon(
                 Icons.Default.Delete,
-                contentDescription = stringResource(R.string.delete),
+                contentDescription = androidx.compose.ui.res.stringResource(R.string.delete),
                 tint = if (isRunning) 
                     MaterialTheme.colorScheme.onSurfaceVariant 
                 else 
@@ -167,7 +167,7 @@ fun StatusOverviewCard(
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                text = stringResource(R.string.status_overview),
+                text = androidx.compose.ui.res.stringResource(R.string.status_overview),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -190,7 +190,7 @@ fun StatusOverviewCard(
                     color = MaterialTheme.colorScheme.secondary
                 )
                 StatusItem(
-                    label = stringResource(R.string.running),
+                    label = androidx.compose.ui.res.stringResource(R.string.running),
                     count = runningCount,
                     icon = Icons.Default.PlayArrow,
                     color = Success

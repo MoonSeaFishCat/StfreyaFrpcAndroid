@@ -52,7 +52,7 @@ fun ErrorSnackbar(
                 IconButton(onClick = onDismiss) {
                     Icon(
                         Icons.Default.Close,
-                        contentDescription = stringResource(R.string.dismiss),
+                        contentDescription = androidx.compose.ui.res.stringResource(R.string.dismiss),
                         tint = MaterialTheme.colorScheme.onErrorContainer
                     )
                 }

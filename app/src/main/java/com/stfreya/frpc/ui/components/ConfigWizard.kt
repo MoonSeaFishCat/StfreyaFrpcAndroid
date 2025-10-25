@@ -11,6 +11,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -227,7 +228,7 @@ fun StepIndicator(
                 ) {
                     Surface(
                         modifier = Modifier.size(32.dp),
-                        shape = CircleShape,
+                        shape = androidx.compose.foundation.shape.CircleShape,
                         color = if (index <= currentStep) 
                             MaterialTheme.colorScheme.primary 
                         else 

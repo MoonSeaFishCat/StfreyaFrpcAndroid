@@ -278,7 +278,7 @@ fun StepItem(
     ) {
         Surface(
             modifier = Modifier.size(24.dp),
-            shape = CircleShape,
+            shape = androidx.compose.foundation.shape.CircleShape,
             color = MaterialTheme.colorScheme.primary
         ) {
             Box(contentAlignment = Alignment.Center) {

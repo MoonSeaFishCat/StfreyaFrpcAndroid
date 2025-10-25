@@ -231,7 +231,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     items(frpcConfigList) { config ->
-                        ConfigCard(
+                        ConfigItemCard(
                             config = config,
                             isRunning = runningConfigList.contains(config),
                             onStartStop = { isRunning ->
@@ -253,7 +253,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     items(frpsConfigList) { config ->
-                        ConfigCard(
+                        ConfigItemCard(
                             config = config,
                             isRunning = runningConfigList.contains(config),
                             onStartStop = { isRunning ->
@@ -508,7 +508,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun ConfigCard(
+    fun ConfigItemCard(
         config: FrpConfig,
         isRunning: Boolean,
         onStartStop: (Boolean) -> Unit,
