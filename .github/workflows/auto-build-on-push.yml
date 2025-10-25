@@ -48,6 +48,23 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
           
+    - name: Generate keystore.properties
+      run: |
+        # 创建keystore.properties文件以避免构建错误
+        cat > keystore.properties << EOF
+        keyAlias=stferyaFrpcandroid
+        keyPassword=1145141919810
+        storeFile=keystore.jks
+        storePassword=1145141919810
+        EOF
+        echo "Created keystore.properties file"
+        
+    - name: Setup debug keystore
+      run: |
+        # 创建调试keystore用于构建
+        keytool -genkey -v -keystore keystore.jks -alias stferyaFrpcandroid -keyalg RSA -keysize 2048 -validity 10000 -storepass 1145141919810 -keypass 1145141919810 -dname "CN=StfreyaFrpc,O=Stfreya,C=US"
+        echo "Created debug keystore"
+        
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
       

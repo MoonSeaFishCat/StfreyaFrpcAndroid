@@ -121,6 +121,27 @@ FRP 项目同样采用 Apache License 2.0 许可证。
 - [Jetpack Compose](https://developer.android.com/jetpack/compose) - UI 框架
 - [Material 3](https://m3.material.io/) - 设计系统
 
+## 开发设置
+
+### 快速开始
+
+```bash
+# 1. 克隆项目
+git clone https://github.com/stfreya/StfreyaFrpc.git
+cd StfreyaFrpc
+
+# 2. 设置本地环境
+chmod +x scripts/setup-local.sh
+./scripts/setup-local.sh
+
+# 3. 构建APK
+./gradlew assembleDebug
+```
+
+### Keystore 配置
+
+项目需要keystore文件进行签名。详细配置请参考 [Keystore 设置说明](docs/KEYSTORE_SETUP.md)。
+
 ## 贡献
 
 欢迎提交 Issue 和 Pull Request！
