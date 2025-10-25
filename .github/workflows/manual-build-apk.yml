@@ -147,7 +147,7 @@ jobs:
     - name: Get APK info
       id: apk-info
       run: |
-        # 优先查找universal APK
+        # 查找universal APK（包含所有架构的APK）
         APK_FILE=$(find app/build/outputs/apk -name "*universal*.apk" | head -1)
         if [ -z "$APK_FILE" ]; then
           # 如果没找到universal APK，查找任何APK文件
@@ -160,6 +160,7 @@ jobs:
           echo "apk_size=$APK_SIZE" >> $GITHUB_OUTPUT
           echo "apk_size_mb=$APK_SIZE_MB" >> $GITHUB_OUTPUT
           echo "APK: $APK_FILE (${APK_SIZE_MB} MB)"
+          echo "APK类型: Universal APK (支持所有架构)"
         else
           echo "No APK file found"
           exit 1
@@ -170,7 +171,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: stfreya-frpc-${{ env.BUILD_TYPE }}-v${{ steps.frp-version.outputs.frp_version }}
-        path: app/build/outputs/apk/${{ env.BUILD_TYPE }}/universal/*.apk
+        path: app/build/outputs/apk/${{ env.BUILD_TYPE }}/*universal*.apk
         retention-days: 30
         
     - name: Create Release
@@ -209,7 +210,7 @@ jobs:
           ---
           *此版本由手动构建工作流创建*
         files: |
-          app/build/outputs/apk/${{ env.BUILD_TYPE }}/universal/*.apk
+          app/build/outputs/apk/${{ env.BUILD_TYPE }}/*universal*.apk
         draft: false
         prerelease: ${{ env.BUILD_TYPE == 'debug' }}
       env:
