@@ -31,7 +31,7 @@ jobs:
           
           try {
             // Get all workflows
-            const workflows = await github.rest.actions.listWorkflowsForRepo({
+            const workflows = await github.rest.actions.listWorkflows({
               owner: context.repo.owner,
               repo: context.repo.repo
             });

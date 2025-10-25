@@ -45,11 +45,11 @@ jobs:
           
           try {
             // Get all workflows
-            const workflows = await github.rest.actions.listWorkflowsForRepo({
+            const workflows = await github.rest.actions.listWorkflows({
               owner: context.repo.owner,
               repo: context.repo.repo
             });
-            
+          
             let totalDeleted = 0;
             let totalSkipped = 0;
             let totalCancelled = 0;
@@ -167,7 +167,7 @@ jobs:
           
           try {
             // Get all workflows
-            const workflows = await github.rest.actions.listWorkflowsForRepo({
+            const workflows = await github.rest.actions.listWorkflows({
               owner: context.repo.owner,
               repo: context.repo.repo
             });

@@ -60,7 +60,7 @@ jobs:
           
           try {
             // Get all workflows
-            const workflows = await github.rest.actions.listWorkflowsForRepo({
+            const workflows = await github.rest.actions.listWorkflows({
               owner: context.repo.owner,
               repo: context.repo.repo
             });
@@ -73,6 +73,8 @@ jobs:
                 continue;
               }
               
+              console.log(`Checking workflow: ${workflow.name} (ID: ${workflow.id})`);
+              
               // Get running workflow runs
               const runs = await github.rest.actions.listWorkflowRuns({
                 owner: context.repo.owner,
@@ -82,8 +84,12 @@ jobs:
                 per_page: 100
               });
               
+              if (runs.data.workflow_runs.length > 0) {
+                console.log(`Found ${runs.data.workflow_runs.length} running workflows in ${workflow.name}`);
+              }
+              
               for (const run of runs.data.workflow_runs) {
-                console.log(`Cancelling ${workflow.name} run ${run.id}`);
+                console.log(`  - Cancelling run ${run.id} (${run.created_at})`);
                 
                 try {
                   await github.rest.actions.cancelWorkflowRun({
@@ -91,17 +97,20 @@ jobs:
                     repo: context.repo.repo,
                     run_id: run.id
                   });
+                  console.log(`    ✓ Cancelled run ${run.id}`);
                   totalCancelled++;
                 } catch (error) {
-                  console.log(`Failed to cancel run ${run.id}: ${error.message}`);
+                  console.log(`    ✗ Failed to cancel run ${run.id}: ${error.message}`);
                 }
               }
             }
             
-            console.log(`Cancelled ${totalCancelled} running workflows`);
+            console.log(`\n=== Cleanup Summary ===`);
+            console.log(`Total running workflows cancelled: ${totalCancelled}`);
             
           } catch (error) {
             console.error('Error during cleanup:', error);
+            console.log('Continuing with build despite cleanup error...');
             // Don't fail the build if cleanup fails
           }
 
