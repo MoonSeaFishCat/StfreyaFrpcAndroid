@@ -59,7 +59,7 @@ val Warning = Color(0xFFFF9800)
 val Error = Color(0xFFF44336)
 
 class MainActivity : ComponentActivity() {
-    private var isStartup = MutableStateFlow(false)
+    private val isStartup = MutableStateFlow(false)
     private val logText = MutableStateFlow("")
     private val frpcConfigList = MutableStateFlow<List<FrpConfig>>(emptyList())
     private val frpsConfigList = MutableStateFlow<List<FrpConfig>>(emptyList())
@@ -131,7 +131,7 @@ class MainActivity : ComponentActivity() {
         val frpsConfigList by frpsConfigList.collectAsStateWithLifecycle(emptyList())
         val runningConfigList by runningConfigList.collectAsStateWithLifecycle(emptyList())
         val logText by logText.collectAsStateWithLifecycle("")
-        val isStartup by isStartup.collectAsStateWithLifecycle(false)
+        val isStartupState by isStartup.collectAsStateWithLifecycle(false)
         val clipboardManager = LocalClipboardManager.current
 
         var showCreateDialog by remember { mutableStateOf(false) }
@@ -189,7 +189,7 @@ class MainActivity : ComponentActivity() {
                 // Auto Start Switch Card
                 item {
                     AutoStartCard(
-                        isStartup = isStartup.value,
+                        isStartup = isStartupState,
                         onStartupChange = { newValue ->
                             val editor = preferences.edit()
                             editor.putBoolean(PreferencesKey.AUTO_START, newValue)
