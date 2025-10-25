@@ -189,7 +189,7 @@ fun ConfigWizard(
                         modifier = Modifier.weight(1f),
                         enabled = when (currentStep) {
                             0 -> selectedTemplate != null
-                            1 -> serverInfo.address.isNotBlank() && serverInfo.token.isNotBlank()
+                            1 -> serverInfo.address.isNotBlank() && serverInfo.port.isNotBlank()
                             2 -> serviceInfo.name.isNotBlank() && serviceInfo.localPort.isNotBlank() && serviceInfo.remotePort.isNotBlank()
                             else -> true
                         }
@@ -466,11 +466,18 @@ fun ServerInfoStep(
         OutlinedTextField(
             value = serverInfo.token,
             onValueChange = { onServerInfoChanged(serverInfo.copy(token = it)) },
-            label = { Text(stringResource(R.string.server_token)) },
-            placeholder = { Text(stringResource(R.string.server_token_hint)) },
+            label = { Text("${stringResource(R.string.server_token)} (可选)") },
+            placeholder = { Text("${stringResource(R.string.server_token_hint)} (可选)") },
             modifier = Modifier.fillMaxWidth(),
             leadingIcon = {
                 Icon(Icons.Default.Key, contentDescription = null)
+            },
+            supportingText = {
+                Text(
+                    text = "如果服务器启用了认证，请输入 token；否则留空",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         )
     }
@@ -605,13 +612,17 @@ fun ConfigPreviewStep(
 
 private fun generateConfig(serverInfo: ServerInfo, serviceInfo: ServiceInfo): String {
     return buildString {
-        // TOML 格式配置 - 使用新版本格式
+        // TOML 格式配置 - 使用正确的 FRP 0.65.0 格式
         appendLine("serverAddr = \"${serverInfo.address}\"")
         appendLine("serverPort = ${serverInfo.port}")
-        if (serverInfo.token.isNotEmpty()) {
-            appendLine("token = \"${serverInfo.token}\"")
-        }
         appendLine()
+        
+        // 添加认证配置（可选）
+        if (serverInfo.token.isNotBlank()) {
+            appendLine("[auth]")
+            appendLine("token = \"${serverInfo.token}\"")
+            appendLine()
+        }
         
         // 添加日志配置
         appendLine("[log]")
