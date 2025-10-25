@@ -47,7 +47,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.stfreya.frpc.ui.theme.StfreyaFrpcTheme
 import com.stfreya.frpc.ui.components.ConfigCard
-import com.stfreya.frpc.ui.components.ErrorHandler
 import com.stfreya.frpc.ui.components.ConfigWizard
 import com.stfreya.frpc.ui.components.ConfigHelpDialog
 import kotlinx.coroutines.flow.MutableStateFlow
