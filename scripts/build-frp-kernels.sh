@@ -117,8 +117,8 @@ if [ -f "app/build.gradle.kts" ]; then
     # 备份原文件
     cp app/build.gradle.kts app/build.gradle.kts.backup
     
-    # 更新FRP版本
-    sed -i "s/buildConfigField(\"String\", \"FrpVersion\", \".*\")/buildConfigField(\"String\", \"FrpVersion\", \"\\\"$FRP_VERSION\\\"\")/" app/build.gradle.kts
+    # 更新FRP版本 - 使用更简单的替换方法
+    sed -i "s/\"0\.[0-9]*\.[0-9]*\"/\"$FRP_VERSION\"/" app/build.gradle.kts
     
     echo "✅ Updated build.gradle.kts"
     echo "📋 New FrpVersion setting:"
