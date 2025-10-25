@@ -87,12 +87,12 @@ jobs:
       run: |
         if [ -n "${{ secrets.KEYSTORE_BASE64 }}" ]; then
           echo "Setting up keystore from secrets"
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > keystore.jks
-          echo "keystore.jks created"
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > app/keystore.jks
+          echo "app/keystore.jks created"
         else
           echo "No keystore found in secrets, using debug keystore"
           # 创建调试keystore用于测试
-          keytool -genkey -v -keystore keystore.jks -alias stferyaFrpcandroid -keyalg RSA -keysize 2048 -validity 10000 -storepass 1145141919810 -keypass 1145141919810 -dname "CN=StfreyaFrpc,O=Stfreya,C=US"
+          keytool -genkey -v -keystore app/keystore.jks -alias stferyaFrpcandroid -keyalg RSA -keysize 2048 -validity 10000 -storepass 1145141919810 -keypass 1145141919810 -dname "CN=StfreyaFrpc,O=Stfreya,C=US"
         fi
         
     - name: Update FRP kernels
