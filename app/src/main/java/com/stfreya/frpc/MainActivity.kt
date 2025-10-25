@@ -27,7 +27,27 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.filled.ContentCopy
-import androidx.compose.material3.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,11 +82,11 @@ val Warning = Color(0xFFFF9800)
 val Error = Color(0xFFF44336)
 
 class MainActivity : ComponentActivity() {
-    private val isStartup = MutableStateFlow(false)
-    private val logText = MutableStateFlow("")
-    private val frpcConfigList = MutableStateFlow<List<FrpConfig>>(emptyList())
-    private val frpsConfigList = MutableStateFlow<List<FrpConfig>>(emptyList())
-    private val runningConfigList = MutableStateFlow<List<FrpConfig>>(emptyList())
+    private val isStartup = kotlinx.coroutines.flow.MutableStateFlow(false)
+    private val logText = kotlinx.coroutines.flow.MutableStateFlow("")
+    private val frpcConfigList = kotlinx.coroutines.flow.MutableStateFlow<List<FrpConfig>>(emptyList())
+    private val frpsConfigList = kotlinx.coroutines.flow.MutableStateFlow<List<FrpConfig>>(emptyList())
+    private val runningConfigList = kotlinx.coroutines.flow.MutableStateFlow<List<FrpConfig>>(emptyList())
 
     private lateinit var preferences: SharedPreferences
 
@@ -308,10 +328,10 @@ class MainActivity : ComponentActivity() {
                     )
                     
                     // 添加到配置列表
-                    val currentList: List<FrpConfig> = frpcConfigList.value
+                    val currentList: List<FrpConfig> = this@MainActivity.frpcConfigList.value
                     val newList = currentList.toMutableList()
                     newList.add(frpConfig)
-                    frpcConfigList.value = newList
+                    this@MainActivity.frpcConfigList.value = newList
                     
                     showConfigWizard = false
                     Toast.makeText(this@MainActivity, "配置已创建", Toast.LENGTH_SHORT).show()
