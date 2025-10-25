@@ -34,8 +34,8 @@
         <item name="colorSurfaceBright">@color/surface_bright_dark</item>
         <item name="android:colorBackground">@color/background_dark</item>
         <item name="colorOnBackground">@color/on_background_dark</item>
-        <item name="android:colorScrim">@color/scrim_dark</item>
-        <item name="android:colorShadow">@color/shadow_dark</item>
+        <item name="colorScrim">@color/scrim_dark</item>
+        <item name="colorShadow">@color/shadow_dark</item>
         <item name="colorSurfaceTint">@color/surface_tint_dark</item>
         <item name="colorPrimaryFixed">@color/primary_fixed_dark</item>
         <item name="colorOnPrimaryFixed">@color/on_primary_fixed_dark</item>

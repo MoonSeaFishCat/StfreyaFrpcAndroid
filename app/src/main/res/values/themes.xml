@@ -34,8 +34,8 @@
         <item name="colorSurfaceBright">@color/surface_bright</item>
         <item name="android:colorBackground">@color/background</item>
         <item name="colorOnBackground">@color/on_background</item>
-        <item name="android:colorScrim">@color/scrim</item>
-        <item name="android:colorShadow">@color/shadow</item>
+        <item name="colorScrim">@color/scrim</item>
+        <item name="colorShadow">@color/shadow</item>
         <item name="colorSurfaceTint">@color/surface_tint</item>
         <item name="colorPrimaryFixed">@color/primary_fixed</item>
         <item name="colorOnPrimaryFixed">@color/on_primary_fixed</item>
