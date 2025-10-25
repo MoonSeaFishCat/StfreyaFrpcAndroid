@@ -61,12 +61,7 @@
     <string name="original_frp_project">Original FRP project</string>
     
     <!-- Feature descriptions -->
-    <string name="frpc_support">Run FRP client configurations</string>
-    <string name="frps_support">Run FRP server configurations</string>
     <string name="auto_start_feature">Start configurations on boot</string>
-    <string name="background_service">Reliable background execution</string>
-    <string name="modern_ui">Material 3 design language</string>
-    <string name="secure">Local configuration storage</string>
     
     <!-- Credits and License -->
     <string name="credits_description">This app is built on top of the excellent FRP project by fatedier. Special thanks to the FRP community for their contributions and the Android development community for their tools and libraries.</string>
@@ -140,7 +135,6 @@
     <string name="frps">FRPS</string>
     <string name="dismiss">关闭</string>
     <string name="back">返回</string>
-    <string name="app_name">StfreyaFrpc</string>
     <string name="app_subtitle">现代 FRP 客户端 for Android</string>
     <string name="app_description">快速、可靠、易用</string>
     <string name="version_information">版本信息</string>
