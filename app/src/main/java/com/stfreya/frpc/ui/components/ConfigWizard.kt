@@ -86,12 +86,14 @@ fun ConfigWizard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
+            .fillMaxHeight(0.9f)
             .padding(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .fillMaxHeight()
                 .padding(24.dp)
         ) {
             // 标题
@@ -130,31 +132,37 @@ fun ConfigWizard(
             
             Spacer(modifier = Modifier.height(24.dp))
             
-            // 步骤内容
-            when (currentStep) {
-                0 -> TemplateSelectionStep(
-                    selectedTemplate = selectedTemplate,
-                    onTemplateSelected = { 
-                        selectedTemplate = it
-                        serviceInfo = serviceInfo.copy(type = it)
-                    }
-                )
-                1 -> ServerInfoStep(
-                    serverInfo = serverInfo,
-                    onServerInfoChanged = { serverInfo = it }
-                )
-                2 -> ServiceConfigStep(
-                    serviceInfo = serviceInfo,
-                    onServiceInfoChanged = { serviceInfo = it }
-                )
-                3 -> ConfigPreviewStep(
-                    serverInfo = serverInfo,
-                    serviceInfo = serviceInfo,
-                    onConfigGenerated = onConfigGenerated
-                )
+            // 步骤内容 - 使用可滚动区域
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+            ) {
+                when (currentStep) {
+                    0 -> TemplateSelectionStep(
+                        selectedTemplate = selectedTemplate,
+                        onTemplateSelected = { 
+                            selectedTemplate = it
+                            serviceInfo = serviceInfo.copy(type = it)
+                        }
+                    )
+                    1 -> ServerInfoStep(
+                        serverInfo = serverInfo,
+                        onServerInfoChanged = { serverInfo = it }
+                    )
+                    2 -> ServiceConfigStep(
+                        serviceInfo = serviceInfo,
+                        onServiceInfoChanged = { serviceInfo = it }
+                    )
+                    3 -> ConfigPreviewStep(
+                        serverInfo = serverInfo,
+                        serviceInfo = serviceInfo,
+                        onConfigGenerated = onConfigGenerated
+                    )
+                }
             }
             
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             
             // 导航按钮
             Row(
@@ -170,9 +178,10 @@ fun ConfigWizard(
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(stringResource(R.string.previous_step))
                     }
+                } else {
+                    // 占位符，保持按钮对齐
+                    Spacer(modifier = Modifier.weight(1f))
                 }
-                
-                Spacer(modifier = Modifier.weight(1f))
                 
                 if (currentStep < steps.size - 1) {
                     Button(
