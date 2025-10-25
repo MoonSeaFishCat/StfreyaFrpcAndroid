@@ -13,7 +13,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.Copy
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -112,7 +112,7 @@ class ConfigActivity : ComponentActivity() {
                             clipboardManager.setText(AnnotatedString(configText.text))
                             Toast.makeText(this@ConfigActivity, "Configuration copied to clipboard", Toast.LENGTH_SHORT).show()
                         }) {
-                            Icon(Icons.Outlined.Copy, contentDescription = "Copy")
+                            Icon(Icons.Default.ContentCopy, contentDescription = "Copy")
                         }
                         IconButton(onClick = { showRenameDialog = true }) {
                             Icon(Icons.Default.Edit, contentDescription = "Rename")

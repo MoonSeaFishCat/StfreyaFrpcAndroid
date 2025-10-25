@@ -26,7 +26,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.Copy
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -194,7 +194,7 @@ class MainActivity : ComponentActivity() {
                             val editor = preferences.edit()
                             editor.putBoolean(PreferencesKey.AUTO_START, newValue)
                             editor.apply()
-                            isStartup = newValue
+                            isStartup.value = newValue
                         }
                     )
                 }
@@ -693,7 +693,7 @@ class MainActivity : ComponentActivity() {
                             onClick = onCopy,
                             modifier = Modifier.weight(1f)
                         ) {
-                            Icon(Icons.Outlined.Copy, contentDescription = null)
+                            Icon(Icons.Default.ContentCopy, contentDescription = null)
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(stringResource(R.string.copy))
                         }
