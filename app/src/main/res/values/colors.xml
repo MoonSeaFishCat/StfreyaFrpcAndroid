@@ -106,4 +106,26 @@
     <color name="on_error_dark">#690005</color>
     <color name="error_container_dark">#93000A</color>
     <color name="on_error_container_dark">#FFDAD6</color>
+    
+    <!-- Missing Dark Theme Colors -->
+    <color name="primary_dark">#90CAF9</color>
+    <color name="on_primary_dark">#003258</color>
+    <color name="primary_variant_dark">#90CAF9</color>
+    <color name="secondary_dark">#4DD0E1</color>
+    <color name="on_secondary_dark">#00363A</color>
+    <color name="secondary_variant_dark">#4DD0E1</color>
+    <color name="surface_dark">#1C1B1F</color>
+    <color name="on_surface_dark">#E6E1E5</color>
+    <color name="surface_variant_dark">#49454F</color>
+    <color name="on_surface_variant_dark">#CAC4D0</color>
+    <color name="outline_dark">#938F99</color>
+    <color name="outline_variant_dark">#49454F</color>
+    <color name="background_dark">#1C1B1F</color>
+    <color name="on_background_dark">#E6E1E5</color>
+    
+    <!-- Additional Missing Colors -->
+    <color name="colorBackground">#FFFBFE</color>
+    <color name="colorScrim">#000000</color>
+    <color name="colorShadow">#000000</color>
+    <color name="colorSurfaceTint">#1976D2</color>
 </resources>

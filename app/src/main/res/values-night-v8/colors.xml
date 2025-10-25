@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dark theme colors for API 26+ -->
+    <color name="primary_dark">#90CAF9</color>
+    <color name="on_primary_dark">#003258</color>
+    <color name="primary_variant_dark">#90CAF9</color>
+    <color name="secondary_dark">#4DD0E1</color>
+    <color name="on_secondary_dark">#00363A</color>
+    <color name="secondary_variant_dark">#4DD0E1</color>
+    <color name="surface_dark">#1C1B1F</color>
+    <color name="on_surface_dark">#E6E1E5</color>
+    <color name="surface_variant_dark">#49454F</color>
+    <color name="on_surface_variant_dark">#CAC4D0</color>
+    <color name="outline_dark">#938F99</color>
+    <color name="outline_variant_dark">#49454F</color>
+    <color name="background_dark">#1C1B1F</color>
+    <color name="on_background_dark">#E6E1E5</color>
+</resources>
