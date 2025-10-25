@@ -189,7 +189,7 @@ class MainActivity : ComponentActivity() {
                 // Auto Start Switch Card
                 item {
                     AutoStartCard(
-                        isStartup = isStartup,
+                        isStartup = isStartup.value,
                         onStartupChange = { newValue ->
                             val editor = preferences.edit()
                             editor.putBoolean(PreferencesKey.AUTO_START, newValue)
