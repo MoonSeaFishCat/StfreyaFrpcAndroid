@@ -39,11 +39,15 @@ data class ServiceInfo(
     val remotePort: String = ""
 )
 
-enum class ServiceType(val displayName: String, val example: String) {
-    HTTP("网站服务 (HTTP)", "例如：80, 8080, 3000"),
-    SSH("SSH远程连接", "默认22"),
-    RDP("远程桌面 (RDP)", "默认3389"),
-    CUSTOM("自定义服务", "自定义端口")
+enum class ServiceType(val displayName: String, val example: String, val frpType: String) {
+    HTTP("网站服务 (HTTP)", "例如：80, 8080, 3000", "http"),
+    SSH("SSH远程连接", "默认22", "tcp"),
+    RDP("远程桌面 (RDP)", "默认3389", "tcp"),
+    TCP("TCP服务", "自定义端口", "tcp"),
+    UDP("UDP服务", "自定义端口", "udp"),
+    HTTPS("HTTPS服务", "例如：443, 8443", "https"),
+    STCP("安全TCP", "点对点连接", "stcp"),
+    SUDP("安全UDP", "点对点连接", "sudp")
 }
 
 @Composable
@@ -361,7 +365,11 @@ fun TemplateCard(
                     ServiceType.HTTP -> Icons.Default.Web
                     ServiceType.SSH -> Icons.Default.Terminal
                     ServiceType.RDP -> Icons.Default.DesktopWindows
-                    ServiceType.CUSTOM -> Icons.Default.Settings
+                    ServiceType.TCP -> Icons.Default.Settings
+                    ServiceType.UDP -> Icons.Default.NetworkCheck
+                    ServiceType.HTTPS -> Icons.Default.Lock
+                    ServiceType.STCP -> Icons.Default.Security
+                    ServiceType.SUDP -> Icons.Default.Security
                 },
                 contentDescription = null,
                 tint = if (isSelected) 
@@ -588,21 +596,35 @@ fun ConfigPreviewStep(
 
 private fun generateConfig(serverInfo: ServerInfo, serviceInfo: ServiceInfo): String {
     return buildString {
-        appendLine("[common]")
-        appendLine("server_addr = ${serverInfo.address}")
-        appendLine("server_port = ${serverInfo.port}")
-        appendLine("token = ${serverInfo.token}")
+        // TOML 格式配置 - 使用新版本格式
+        appendLine("serverAddr = \"${serverInfo.address}\"")
+        appendLine("serverPort = ${serverInfo.port}")
+        if (serverInfo.token.isNotEmpty()) {
+            appendLine("token = \"${serverInfo.token}\"")
+        }
         appendLine()
-        appendLine("[${serviceInfo.name}]")
-        appendLine("type = ${serviceInfo.type.name.lowercase()}")
-        appendLine("local_ip = 127.0.0.1")
-        appendLine("local_port = ${serviceInfo.localPort}")
-        appendLine("remote_port = ${serviceInfo.remotePort}")
+        
+        // 添加日志配置
+        appendLine("[log]")
+        appendLine("level = \"info\"")
+        appendLine("disablePrintColor = true")
+        appendLine()
+        
+        // 添加代理配置
+        appendLine("[[proxies]]")
+        appendLine("name = \"${serviceInfo.name}\"")
+        appendLine("type = \"${serviceInfo.type.frpType}\"")
+        appendLine("localIP = \"127.0.0.1\"")
+        appendLine("localPort = ${serviceInfo.localPort}")
+        appendLine("remotePort = ${serviceInfo.remotePort}")
         
         // 根据服务类型添加特定配置
         when (serviceInfo.type) {
             ServiceType.HTTP -> {
-                appendLine("custom_domains = your-domain.com")
+                appendLine("customDomains = [\"your-domain.com\"]")
+            }
+            ServiceType.HTTPS -> {
+                appendLine("customDomains = [\"your-domain.com\"]")
             }
             ServiceType.SSH -> {
                 // SSH 不需要额外配置
@@ -610,8 +632,19 @@ private fun generateConfig(serverInfo: ServerInfo, serviceInfo: ServiceInfo): St
             ServiceType.RDP -> {
                 // RDP 不需要额外配置
             }
-            ServiceType.CUSTOM -> {
-                // 自定义服务不需要额外配置
+            ServiceType.TCP -> {
+                // TCP 不需要额外配置
+            }
+            ServiceType.UDP -> {
+                // UDP 不需要额外配置
+            }
+            ServiceType.STCP -> {
+                // STCP 需要 secretKey
+                appendLine("secretKey = \"your-secret-key\"")
+            }
+            ServiceType.SUDP -> {
+                // SUDP 需要 secretKey
+                appendLine("secretKey = \"your-secret-key\"")
             }
         }
     }

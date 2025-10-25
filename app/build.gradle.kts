@@ -57,8 +57,8 @@ android {
 
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
-            isShrinkResources = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 // Includes the default ProGuard rules files that are packaged with
                 // the Android Gradle plugin. To learn more, go to the section about
@@ -70,6 +70,8 @@ android {
             signingConfig = signingConfigs.getByName("AceKeystore")
         }
         getByName("debug") {
+            isMinifyEnabled = false
+            isShrinkResources = false
             signingConfig = signingConfigs.getByName("AceKeystore")
         }
     }
@@ -83,6 +85,22 @@ android {
     packaging {
         jniLibs {
             useLegacyPackaging = true
+        }
+        resources {
+            excludes += setOf(
+                "META-INF/DEPENDENCIES",
+                "META-INF/LICENSE",
+                "META-INF/LICENSE.txt",
+                "META-INF/NOTICE",
+                "META-INF/NOTICE.txt",
+                "META-INF/*.kotlin_module",
+                "META-INF/*.version",
+                "META-INF/gradle/incremental.annotation.processors",
+                "**/attach_hotspot_windows.dll",
+                "META-INF/licenses/**",
+                "META-INF/AL2.0",
+                "META-INF/LGPL2.1"
+            )
         }
     }
     // 生成universal APK，包含所有架构

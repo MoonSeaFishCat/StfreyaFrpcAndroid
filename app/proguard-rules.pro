@@ -5,6 +5,37 @@
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
+# Keep native methods
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+
+# Keep FRP related classes
+-keep class com.stfreya.frpc.** { *; }
+
+# Keep Compose related classes
+-keep class androidx.compose.** { *; }
+
+# Keep data classes
+-keep class * implements java.io.Serializable { *; }
+
+# Keep enum classes
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+# Keep Parcelable classes
+-keep class * implements android.os.Parcelable {
+    public static final android.os.Parcelable$Creator *;
+}
+
+# Keep R class
+-keep class com.stfreya.frpc.R$* { *; }
+
+# Keep BuildConfig
+-keep class com.stfreya.frpc.BuildConfig { *; }
+
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
 # class:
