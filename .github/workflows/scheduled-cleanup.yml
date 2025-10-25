@@ -1,6 +1,6 @@
-name: Delete old workflow runs
+name: Delete failed workflow runs
 on:
-# Run weekly, at 00:00 on sunday.
+  # 每周日 00:00 运行
   schedule:
     - cron: '0 0 * * 0'
   workflow_dispatch:
@@ -12,10 +12,11 @@ jobs:
       actions: write
       contents: read
     steps:
-      - name: Delete workflow runs for remote repo
+      - name: Delete failed workflow runs for remote repo
         uses: Mattraks/delete-workflow-runs@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           repository: 'MoonSeaFishCat/StfreyaFrpcAndroid'
-          retain_days: 1
-          keep_minimum_runs: 3
+          delete_run_by_conclusion_pattern: 'failure'  # 关键修改：仅删除结论为“失败”的运行
+          retain_days: 0  # 设置为0以确保所有失败运行均被考虑（无论时间）
+          keep_minimum_runs: 0  # 设置为0以确保不保留任何最小运行数
