@@ -18,7 +18,6 @@
     <string name="deleteConfigButton">Delete</string>
     <string name="rename">Rename</string>
     <string name="confirm">Confirm</string>
-    <string name="dismiss">Dismiss</string>
     <string name="edit_configuration">Edit Configuration</string>
     <string name="configuration_editor">Configuration Editor</string>
     <string name="enter_configuration_here">Enter your configuration here...</string>
@@ -34,8 +33,6 @@
     
     <!-- Status and Overview -->
     <string name="status_overview">Status Overview</string>
-    <string name="frpc_configurations">FRPC Configurations</string>
-    <string name="frps_configurations">FRPS Configurations</string>
     <string name="running">Running</string>
     <string name="startup_description">Start configurations automatically on boot</string>
     <string name="auto_start_description">Start this configuration automatically on boot</string>
@@ -59,20 +56,6 @@
     
     <!-- About Activity -->
     <string name="about">About</string>
-    <string name="version_information">Version Information</string>
-    <string name="app_version">App Version</string>
-    <string name="version_code">Version Code</string>
-    <string name="frp_version">FRP Version</string>
-    <string name="build_type">Build Type</string>
-    <string name="debug">Debug</string>
-    <string name="release">Release</string>
-    <string name="features">Features</string>
-    <string name="links">Links</string>
-    <string name="credits">Credits</string>
-    <string name="license">License</string>
-    <string name="website">Website</string>
-    <string name="github">GitHub</string>
-    <string name="frp_project">FRP Project</string>
     <string name="visit_website">Visit our website</string>
     <string name="view_source_code">View source code</string>
     <string name="original_frp_project">Original FRP project</string>
@@ -99,8 +82,6 @@
     <!-- Dialog titles -->
     <string name="choose_config_type">Choose Configuration Type</string>
     <string name="choose_config_description">Choose the type of configuration you want to create:</string>
-    <string name="frpc">FRPC</string>
-    <string name="frps">FRPS</string>
     
     <!-- Config Wizard -->
     <string name="config_wizard">Config Wizard</string>
