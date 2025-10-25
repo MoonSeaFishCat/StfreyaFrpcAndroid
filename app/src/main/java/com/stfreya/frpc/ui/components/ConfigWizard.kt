@@ -60,7 +60,7 @@ fun ConfigWizard(
         WizardStep(
             title = stringResource(R.string.config_templates),
             description = stringResource(R.string.template_description),
-            icon = Icons.Default.Template
+            icon = Icons.Default.List
         ),
         WizardStep(
             title = stringResource(R.string.server_info),
@@ -440,7 +440,7 @@ fun ServerInfoStep(
             placeholder = { Text(stringResource(R.string.server_port_hint)) },
             modifier = Modifier.fillMaxWidth(),
             leadingIcon = {
-                Icon(Icons.Default.Port, contentDescription = null)
+                Icon(Icons.Default.Settings, contentDescription = null)
             }
         )
         

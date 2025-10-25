@@ -10,9 +10,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.stfreya.frpc.FrpConfig
+import com.stfreya.frpc.R
 
 // Color definitions
 val Success = Color(0xFF4CAF50)
@@ -122,7 +124,7 @@ private fun ConfigActions(
         ) {
             Icon(
                 Icons.Default.Edit,
-                contentDescription = androidx.compose.ui.res.stringResource(R.string.edit),
+                contentDescription = stringResource(R.string.edit),
                 tint = if (isRunning) 
                     MaterialTheme.colorScheme.onSurfaceVariant 
                 else 
@@ -135,7 +137,7 @@ private fun ConfigActions(
         ) {
             Icon(
                 Icons.Default.Delete,
-                contentDescription = androidx.compose.ui.res.stringResource(R.string.delete),
+                contentDescription = stringResource(R.string.delete),
                 tint = if (isRunning) 
                     MaterialTheme.colorScheme.onSurfaceVariant 
                 else 
@@ -167,7 +169,7 @@ fun StatusOverviewCard(
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                text = androidx.compose.ui.res.stringResource(R.string.status_overview),
+                text = stringResource(R.string.status_overview),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -190,7 +192,7 @@ fun StatusOverviewCard(
                     color = MaterialTheme.colorScheme.secondary
                 )
                 StatusItem(
-                    label = androidx.compose.ui.res.stringResource(R.string.running),
+                    label = stringResource(R.string.running),
                     count = runningCount,
                     icon = Icons.Default.PlayArrow,
                     color = Success
