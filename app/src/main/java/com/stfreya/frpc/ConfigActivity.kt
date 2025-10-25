@@ -85,7 +85,7 @@ class ConfigActivity : ComponentActivity() {
                     title = {
                         Column {
                             Text(
-                                text = "Edit Configuration",
+                                text = stringResource(R.string.edit_configuration),
                                 style = MaterialTheme.typography.headlineSmall,
                                 fontWeight = FontWeight.Bold
                             )
@@ -104,18 +104,18 @@ class ConfigActivity : ComponentActivity() {
                                 finish()
                             }
                         }) {
-                            Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                            Icon(Icons.Default.ArrowBack, contentDescription = stringResource(R.string.close))
                         }
                     },
                     actions = {
                         IconButton(onClick = { 
                             clipboardManager.setText(AnnotatedString(configText.text))
-                            Toast.makeText(this@ConfigActivity, "Configuration copied to clipboard", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@ConfigActivity, getString(R.string.configuration_copied), Toast.LENGTH_SHORT).show()
                         }) {
-                            Icon(Icons.Default.ContentCopy, contentDescription = "Copy")
+                            Icon(Icons.Default.ContentCopy, contentDescription = stringResource(R.string.copy))
                         }
                         IconButton(onClick = { showRenameDialog = true }) {
-                            Icon(Icons.Default.Edit, contentDescription = "Rename")
+                            Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.rename))
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
@@ -132,7 +132,7 @@ class ConfigActivity : ComponentActivity() {
                     },
                     containerColor = MaterialTheme.colorScheme.primary
                 ) {
-                    Icon(Icons.Default.Save, contentDescription = "Save")
+                    Icon(Icons.Default.Save, contentDescription = stringResource(R.string.save))
                 }
             }
         ) { paddingValues ->
@@ -173,7 +173,7 @@ class ConfigActivity : ComponentActivity() {
                                     fontWeight = FontWeight.Medium
                                 )
                                 Text(
-                                    text = "Start this configuration automatically on boot",
+                                    text = stringResource(R.string.auto_start_description),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -206,7 +206,7 @@ class ConfigActivity : ComponentActivity() {
                                 tint = MaterialTheme.colorScheme.primary
                             )
                             Text(
-                                text = "Configuration Editor",
+                                text = stringResource(R.string.configuration_editor),
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Medium
                             )
@@ -265,7 +265,7 @@ class ConfigActivity : ComponentActivity() {
                     ) {
                         Icon(Icons.Default.Close, contentDescription = null)
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("Cancel")
+                        Text(stringResource(R.string.cancel))
                     }
                     
                     Button(
@@ -339,7 +339,7 @@ class ConfigActivity : ComponentActivity() {
                     OutlinedTextField(
                         value = newName,
                         onValueChange = { newName = it },
-                        label = { Text("Configuration Name") },
+                        label = { Text(stringResource(R.string.rename)) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -383,12 +383,12 @@ class ConfigActivity : ComponentActivity() {
             },
             confirmButton = {
                 Button(onClick = onSave) {
-                    Text("Save")
+                    Text(stringResource(R.string.save))
                 }
             },
             dismissButton = {
                 TextButton(onClick = onDiscard) {
-                    Text("Discard")
+                    Text(stringResource(R.string.discard))
                 }
             }
         )
@@ -427,7 +427,7 @@ class ConfigActivity : ComponentActivity() {
         configFile.renameTo(newFile)
         configFile = newFile
         setAutoStart(originAutoStart)
-        Toast.makeText(this, "Configuration renamed successfully", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.configuration_renamed), Toast.LENGTH_SHORT).show()
     }
 
     fun readIsAutoStart() {

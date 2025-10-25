@@ -46,6 +46,11 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.stfreya.frpc.ui.theme.StfreyaFrpcTheme
+import com.stfreya.frpc.ui.components.ConfigCard
+import com.stfreya.frpc.ui.components.ErrorHandler
+import com.stfreya.frpc.ui.components.LogDialog
+import com.stfreya.frpc.ui.components.ConfigWizard
+import com.stfreya.frpc.ui.components.ConfigHelpDialog
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.io.File
@@ -136,6 +141,8 @@ class MainActivity : ComponentActivity() {
 
         var showCreateDialog by remember { mutableStateOf(false) }
         var showLogDialog by remember { mutableStateOf(false) }
+        var showConfigWizard by remember { mutableStateOf(false) }
+        var showHelpDialog by remember { mutableStateOf(false) }
 
         Scaffold(
             topBar = {
@@ -155,13 +162,19 @@ class MainActivity : ComponentActivity() {
                         }
                     },
                     actions = {
+                        IconButton(onClick = { showConfigWizard = true }) {
+                            Icon(Icons.Default.AutoAwesome, contentDescription = stringResource(R.string.config_wizard))
+                        }
+                        IconButton(onClick = { showHelpDialog = true }) {
+                            Icon(Icons.Default.Help, contentDescription = stringResource(R.string.config_help))
+                        }
                         IconButton(onClick = { showLogDialog = true }) {
-                            Icon(Icons.Default.List, contentDescription = "Logs")
+                            Icon(Icons.Default.List, contentDescription = getString(R.string.frp_log))
                         }
                         IconButton(onClick = { 
                             startActivity(Intent(this@MainActivity, AboutActivity::class.java)) 
                         }) {
-                            Icon(Icons.Default.Info, contentDescription = "About")
+                            Icon(Icons.Default.Info, contentDescription = getString(R.string.about))
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
@@ -175,7 +188,7 @@ class MainActivity : ComponentActivity() {
                     onClick = { showCreateDialog = true },
                     containerColor = MaterialTheme.colorScheme.primary
                 ) {
-                    Icon(Icons.Default.Add, contentDescription = "Add Config")
+                    Icon(Icons.Default.Add, contentDescription = getString(R.string.add_configuration))
                 }
             }
         ) { paddingValues ->
@@ -274,10 +287,47 @@ class MainActivity : ComponentActivity() {
                 onFrpsSelected = { 
                     startConfigActivity(FrpType.FRPS)
                     showCreateDialog = false 
+                },
+                onWizardSelected = {
+                    showCreateDialog = false
+                    showConfigWizard = true
                 }
             )
         }
 
+        // 配置向导对话框
+        if (showConfigWizard) {
+            ConfigWizard(
+                onConfigGenerated = { configText ->
+                    // 创建新配置
+                    val configName = "wizard_config_${System.currentTimeMillis()}.toml"
+                    val configFile = File(filesDir, configName)
+                    configFile.writeText(configText)
+                    
+                    val frpConfig = FrpConfig(
+                        fileName = configName,
+                        type = FrpType.FRPC
+                    )
+                    
+                    // 添加到配置列表
+                    val newList = frpcConfigList.value.toMutableList()
+                    newList.add(frpConfig)
+                    frpcConfigList.value = newList
+                    
+                    showConfigWizard = false
+                    Toast.makeText(this@MainActivity, "配置已创建", Toast.LENGTH_SHORT).show()
+                },
+                onDismiss = { showConfigWizard = false }
+            )
+        }
+        
+        // 帮助对话框
+        if (showHelpDialog) {
+            ConfigHelpDialog(
+                onDismiss = { showHelpDialog = false }
+            )
+        }
+        
         // Log Dialog
         if (showLogDialog) {
             LogDialog(
@@ -328,7 +378,7 @@ class MainActivity : ComponentActivity() {
                             fontWeight = FontWeight.Medium
                         )
                         Text(
-                            text = "Start configurations automatically on boot",
+                            text = getString(R.string.startup_description),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -358,7 +408,7 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text(
-                    text = "Status Overview",
+                    text = stringResource(R.string.status_overview),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -381,7 +431,7 @@ class MainActivity : ComponentActivity() {
                         color = MaterialTheme.colorScheme.secondary
                     )
                     StatusItem(
-                        label = "Running",
+                        label = stringResource(R.string.running),
                         count = runningCount,
                         icon = Icons.Default.PlayArrow,
                         color = Success
@@ -522,7 +572,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         Icon(
                             Icons.Default.Edit,
-                            contentDescription = "Edit",
+                            contentDescription = stringResource(R.string.edit),
                             tint = if (isRunning) 
                                 MaterialTheme.colorScheme.onSurfaceVariant 
                             else 
@@ -535,7 +585,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         Icon(
                             Icons.Default.Delete,
-                            contentDescription = "Delete",
+                            contentDescription = stringResource(R.string.delete),
                             tint = if (isRunning) 
                                 MaterialTheme.colorScheme.onSurfaceVariant 
                             else 
@@ -582,7 +632,7 @@ class MainActivity : ComponentActivity() {
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Tap the + button to create your first configuration",
+                    text = stringResource(R.string.tap_to_add),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
@@ -596,7 +646,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Icon(Icons.Default.Add, contentDescription = null)
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Add Configuration")
+                    Text(stringResource(R.string.add_configuration))
                 }
             }
         }
@@ -606,7 +656,8 @@ class MainActivity : ComponentActivity() {
     fun CreateConfigDialog(
         onDismiss: () -> Unit,
         onFrpcSelected: () -> Unit,
-        onFrpsSelected: () -> Unit
+        onFrpsSelected: () -> Unit,
+        onWizardSelected: () -> Unit
     ) {
         AlertDialog(
             onDismissRequest = onDismiss,
@@ -621,9 +672,45 @@ class MainActivity : ComponentActivity() {
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Text(
-                        text = "Choose the type of configuration you want to create:",
+                        text = stringResource(R.string.choose_config_description),
                         style = MaterialTheme.typography.bodyMedium
                     )
+                    
+                    // 快速设置按钮
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer
+                        )
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { onWizardSelected() }
+                                .padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            Icon(
+                                Icons.Default.AutoAwesome,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                            Column {
+                                Text(
+                                    text = stringResource(R.string.quick_setup),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                                Text(
+                                    text = stringResource(R.string.config_wizard_description),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                                )
+                            }
+                        }
+                    }
                 }
             },
             confirmButton = {
@@ -654,7 +741,7 @@ class MainActivity : ComponentActivity() {
             },
             dismissButton = {
                 TextButton(onClick = onDismiss) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.cancel))
                 }
             }
         )
@@ -716,7 +803,7 @@ class MainActivity : ComponentActivity() {
             },
             confirmButton = {
                 TextButton(onClick = onDismiss) {
-                    Text("Close")
+                    Text(stringResource(R.string.close))
                 }
             }
         )

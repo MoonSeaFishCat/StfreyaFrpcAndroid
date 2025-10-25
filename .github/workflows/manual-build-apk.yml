@@ -47,6 +47,10 @@ env:
 jobs:
   build-apk:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
     
     steps:
     - name: Checkout repository
@@ -143,7 +147,12 @@ jobs:
     - name: Get APK info
       id: apk-info
       run: |
-        APK_FILE=$(find app/build/outputs/apk -name "*.apk" | head -1)
+        # 优先查找universal APK
+        APK_FILE=$(find app/build/outputs/apk -name "*universal*.apk" | head -1)
+        if [ -z "$APK_FILE" ]; then
+          # 如果没找到universal APK，查找任何APK文件
+          APK_FILE=$(find app/build/outputs/apk -name "*.apk" | head -1)
+        fi
         if [ -n "$APK_FILE" ]; then
           APK_SIZE=$(stat -c%s "$APK_FILE")
           APK_SIZE_MB=$(echo "scale=2; $APK_SIZE / 1024 / 1024" | bc)
@@ -161,7 +170,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: stfreya-frpc-${{ env.BUILD_TYPE }}-v${{ steps.frp-version.outputs.frp_version }}
-        path: app/build/outputs/apk/${{ env.BUILD_TYPE }}/*.apk
+        path: app/build/outputs/apk/${{ env.BUILD_TYPE }}/universal/*.apk
         retention-days: 30
         
     - name: Create Release
@@ -181,7 +190,7 @@ jobs:
           - **签名状态**: ${{ env.SIGN_APK }}
           
           ### 📦 下载
-          请下载对应您设备架构的APK文件：
+          此版本为通用APK，支持所有Android设备架构：
           - **arm64-v8a**: 64位ARM设备（大多数现代手机）
           - **armeabi-v7a**: 32位ARM设备（较老的手机）
           - **x86_64**: 64位x86设备（模拟器、平板等）
@@ -200,7 +209,7 @@ jobs:
           ---
           *此版本由手动构建工作流创建*
         files: |
-          app/build/outputs/apk/${{ env.BUILD_TYPE }}/*.apk
+          app/build/outputs/apk/${{ env.BUILD_TYPE }}/universal/*.apk
         draft: false
         prerelease: ${{ env.BUILD_TYPE == 'debug' }}
       env:
@@ -234,6 +243,7 @@ jobs:
         
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### 📱 支持的架构" >> $GITHUB_STEP_SUMMARY
+        echo "- 通用APK支持所有Android设备架构" >> $GITHUB_STEP_SUMMARY
         echo "- arm64-v8a (64位ARM)" >> $GITHUB_STEP_SUMMARY
         echo "- armeabi-v7a (32位ARM)" >> $GITHUB_STEP_SUMMARY
         echo "- x86_64 (64位x86)" >> $GITHUB_STEP_SUMMARY

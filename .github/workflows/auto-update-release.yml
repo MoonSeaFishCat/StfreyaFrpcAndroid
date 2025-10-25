@@ -18,6 +18,10 @@ env:
 jobs:
   check-and-update:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
     
     steps:
     - name: Checkout repository
@@ -134,7 +138,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: stfreya-frpc-v${{ steps.latest-version.outputs.latest }}
-        path: app/build/outputs/apk/release/*.apk
+        path: app/build/outputs/apk/release/universal/*.apk
         retention-days: 30
         
     - name: Create Release
@@ -169,7 +173,7 @@ jobs:
           ---
           *此版本由GitHub Actions自动构建和发布*
         files: |
-          app/build/outputs/apk/release/*.apk
+          app/build/outputs/apk/release/universal/*.apk
         draft: false
         prerelease: false
       env:
