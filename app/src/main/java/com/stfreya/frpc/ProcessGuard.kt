@@ -66,28 +66,34 @@ class ProcessGuard(
      * 监控进程状态
      */
     private suspend fun monitorProcess(config: FrpConfig, shellThread: ShellThread) {
-        while (coroutineContext.isActive) {
-            delay(checkInterval)
-            
-            // 检查线程是否存活
-            if (!shellThread.isAlive) {
-                Logger.w("检测到配置 ${config.fileName} 的进程已退出")
+        try {
+            while (true) {
+                delay(checkInterval)
+                ensureActive() // 检查协程是否被取消
                 
-                // 检查是否超过最大重启次数
-                val restartCount = restartCounts[config] ?: 0
-                if (restartCount >= maxRestartAttempts) {
-                    Logger.e("配置 ${config.fileName} 已达到最大重启次数 ($maxRestartAttempts)，停止自动重启")
-                    onRestartFailed(config, restartCount)
-                    stopMonitoring(config)
-                    return
-                }
-                
-                // 延迟后重启
-                delay(restartDelay)
-                if (coroutineContext.isActive) {
+                // 检查线程是否存活
+                if (!shellThread.isAlive) {
+                    Logger.w("检测到配置 ${config.fileName} 的进程已退出")
+                    
+                    // 检查是否超过最大重启次数
+                    val restartCount = restartCounts[config] ?: 0
+                    if (restartCount >= maxRestartAttempts) {
+                        Logger.e("配置 ${config.fileName} 已达到最大重启次数 ($maxRestartAttempts)，停止自动重启")
+                        onRestartFailed(config, restartCount)
+                        stopMonitoring(config)
+                        return
+                    }
+                    
+                    // 延迟后重启
+                    delay(restartDelay)
+                    ensureActive() // 再次检查协程是否被取消
                     restartProcess(config, restartCount + 1)
                 }
             }
+        } catch (e: CancellationException) {
+            // 协程被取消，正常退出
+            Logger.d("监控协程被取消: ${config.fileName}")
+            throw e
         }
     }
     
