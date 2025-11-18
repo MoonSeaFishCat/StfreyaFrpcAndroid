@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import com.stfreya.frpc.utils.Logger
 import kotlinx.coroutines.*
+import kotlinx.coroutines.ensureActive
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -69,7 +70,7 @@ class ProcessGuard(
         try {
             while (true) {
                 delay(checkInterval)
-                ensureActive() // 检查协程是否被取消
+                coroutineContext.ensureActive() // 检查协程是否被取消
                 
                 // 检查线程是否存活
                 if (!shellThread.isAlive) {
@@ -86,7 +87,7 @@ class ProcessGuard(
                     
                     // 延迟后重启
                     delay(restartDelay)
-                    ensureActive() // 再次检查协程是否被取消
+                    coroutineContext.ensureActive() // 再次检查协程是否被取消
                     restartProcess(config, restartCount + 1)
                 }
             }
