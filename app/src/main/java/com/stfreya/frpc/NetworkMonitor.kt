@@ -105,7 +105,7 @@ class NetworkMonitor(private val context: Context) : DefaultLifecycleObserver {
             } else {
                 @Suppress("DEPRECATION")
                 val activeNetworkInfo = connectivityManager.activeNetworkInfo
-                activeNetworkInfo?.isConnectedOrConnecting == true
+                activeNetworkInfo?.isConnected == true
             }
         } catch (e: Exception) {
             false

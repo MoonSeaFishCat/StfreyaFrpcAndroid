@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -28,7 +29,7 @@ fun ConfigHelpDialog(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Icon(
-                    Icons.Default.Help,
+                    Icons.AutoMirrored.Filled.Help,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary
                 )
@@ -58,7 +59,7 @@ fun ConfigHelpDialog(
                 HelpSection(
                     title = stringResource(R.string.help_common_scenarios),
                     content = "",
-                    icon = Icons.Default.List
+                    icon = Icons.AutoMirrored.Filled.List
                 ) {
                     ServiceType.values().forEach { type ->
                         ServiceHelpItem(

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 使用PNG图片作为前景层 -->
-<bitmap xmlns:android="http://schemas.android.com/apk/res/android"
-    android:src="@drawable/ic_app_icon"
-    android:gravity="center"
-    android:tileMode="disabled" />
+<!-- 使用inset实现等比缩放，避免裁剪 -->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/ic_app_icon"
+    android:inset="15%">
+    <!-- 15%的内边距确保图标等比缩放并完整显示 -->
+</inset>

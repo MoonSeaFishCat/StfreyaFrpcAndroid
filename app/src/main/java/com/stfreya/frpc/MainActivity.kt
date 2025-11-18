@@ -25,6 +25,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material3.AlertDialog
@@ -182,10 +183,10 @@ class MainActivity : ComponentActivity() {
                             Icon(Icons.Default.AutoAwesome, contentDescription = stringResource(R.string.config_wizard))
                         }
                         IconButton(onClick = { showHelpDialog = true }) {
-                            Icon(Icons.Default.Help, contentDescription = stringResource(R.string.config_help))
+                            Icon(Icons.AutoMirrored.Filled.Help, contentDescription = stringResource(R.string.config_help))
                         }
                         IconButton(onClick = { showLogDialog = true }) {
-                            Icon(Icons.Default.List, contentDescription = getString(R.string.frp_log))
+                            Icon(Icons.AutoMirrored.Filled.List, contentDescription = getString(R.string.frp_log))
                         }
                         IconButton(onClick = { 
                             startActivity(Intent(this@MainActivity, AboutActivity::class.java)) 

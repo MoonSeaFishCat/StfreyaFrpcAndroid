@@ -6,6 +6,7 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -68,7 +69,7 @@ fun ConfigWizard(
         WizardStep(
             title = stringResource(R.string.config_templates),
             description = stringResource(R.string.template_description),
-            icon = Icons.Default.List
+            icon = Icons.AutoMirrored.Filled.List
         ),
         WizardStep(
             title = stringResource(R.string.server_info),
@@ -178,7 +179,7 @@ fun ConfigWizard(
                         onClick = { currentStep-- },
                         modifier = Modifier.weight(1f)
                     ) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = null)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(stringResource(R.string.previous_step))
                     }
@@ -200,7 +201,7 @@ fun ConfigWizard(
                     ) {
                         Text(stringResource(R.string.next_step))
                         Spacer(modifier = Modifier.width(8.dp))
-                        Icon(Icons.Default.ArrowForward, contentDescription = null)
+                        Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null)
                     }
                 } else {
                     Button(
@@ -520,7 +521,7 @@ fun ServiceConfigStep(
             placeholder = { Text(stringResource(R.string.service_name_hint)) },
             modifier = Modifier.fillMaxWidth(),
             leadingIcon = {
-                Icon(Icons.Default.Label, contentDescription = null)
+                Icon(Icons.AutoMirrored.Filled.Label, contentDescription = null)
             }
         )
         
