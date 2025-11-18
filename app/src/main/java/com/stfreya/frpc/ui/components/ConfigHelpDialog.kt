@@ -47,8 +47,8 @@ fun ConfigHelpDialog(
             ) {
                 // 基本介绍
                 HelpSection(
-                    title = "什么是FRP？",
-                    content = "FRP是一个高性能的反向代理应用，支持TCP、UDP、HTTP、HTTPS等协议。它可以帮助您将内网服务暴露到公网，实现内网穿透。",
+                    title = stringResource(R.string.help_what_is_frp),
+                    content = stringResource(R.string.help_frp_description),
                     icon = Icons.Default.Info
                 )
                 
@@ -56,7 +56,7 @@ fun ConfigHelpDialog(
                 
                 // 使用场景
                 HelpSection(
-                    title = "常用场景",
+                    title = stringResource(R.string.help_common_scenarios),
                     content = "",
                     icon = Icons.Default.List
                 ) {
@@ -64,14 +64,14 @@ fun ConfigHelpDialog(
                         ServiceHelpItem(
                             type = type,
                             description = when (type) {
-                                ServiceType.HTTP -> "将内网网站服务暴露到公网，让外网用户可以访问您的网站"
-                                ServiceType.SSH -> "通过公网SSH连接到内网设备，进行远程管理"
-                                ServiceType.RDP -> "通过公网远程桌面连接到内网Windows设备"
-                                ServiceType.TCP -> "其他TCP服务的内网穿透"
-                                ServiceType.UDP -> "UDP服务的内网穿透"
-                                ServiceType.HTTPS -> "HTTPS网站服务的内网穿透"
-                                ServiceType.STCP -> "安全TCP点对点连接"
-                                ServiceType.SUDP -> "安全UDP点对点连接"
+                                ServiceType.HTTP -> stringResource(R.string.help_http_scenario)
+                                ServiceType.SSH -> stringResource(R.string.help_ssh_scenario)
+                                ServiceType.RDP -> stringResource(R.string.help_rdp_scenario)
+                                ServiceType.TCP -> stringResource(R.string.help_tcp_scenario)
+                                ServiceType.UDP -> stringResource(R.string.help_udp_scenario)
+                                ServiceType.HTTPS -> stringResource(R.string.help_https_scenario)
+                                ServiceType.STCP -> stringResource(R.string.help_stcp_scenario)
+                                ServiceType.SUDP -> stringResource(R.string.help_sudp_scenario)
                             }
                         )
                     }
@@ -81,29 +81,24 @@ fun ConfigHelpDialog(
                 
                 // 配置步骤
                 HelpSection(
-                    title = "配置步骤",
+                    title = stringResource(R.string.help_config_steps),
                     content = "",
                     icon = Icons.Default.Settings
                 ) {
                     StepItem(
                         step = 1,
-                        title = "准备服务器",
-                        description = "需要一台具有公网IP的服务器来运行FRP服务端"
+                        title = stringResource(R.string.help_step1_title),
+                        description = stringResource(R.string.help_step1_desc)
                     )
                     StepItem(
                         step = 2,
-                        title = "配置服务端",
-                        description = "在服务器上运行frps，设置端口和认证令牌"
+                        title = stringResource(R.string.help_step2_title),
+                        description = stringResource(R.string.help_step2_desc)
                     )
                     StepItem(
                         step = 3,
-                        title = "配置客户端",
-                        description = "使用本应用配置frpc，连接服务器并设置要穿透的服务"
-                    )
-                    StepItem(
-                        step = 4,
-                        title = "开始使用",
-                        description = "启动配置，通过公网地址访问内网服务"
+                        title = stringResource(R.string.help_step3_title),
+                        description = stringResource(R.string.help_step3_desc)
                     )
                 }
                 
@@ -111,12 +106,12 @@ fun ConfigHelpDialog(
                 
                 // 配置示例
                 HelpSection(
-                    title = "配置示例",
+                    title = stringResource(R.string.help_config_examples),
                     content = "",
                     icon = Icons.Default.Code
                 ) {
                     ConfigExample(
-                        title = "网站服务穿透",
+                        title = stringResource(R.string.help_example_web_title),
                         config = """[common]
 server_addr = your-server.com
 server_port = 7000
@@ -132,7 +127,7 @@ custom_domains = your-domain.com"""
                     Spacer(modifier = Modifier.height(12.dp))
                     
                     ConfigExample(
-                        title = "SSH远程连接",
+                        title = stringResource(R.string.help_example_ssh_title),
                         config = """[common]
 server_addr = your-server.com
 server_port = 7000
@@ -150,16 +145,16 @@ remote_port = 6000"""
                 
                 // 注意事项
                 HelpSection(
-                    title = "注意事项",
+                    title = stringResource(R.string.help_notes_title),
                     content = "",
                     icon = Icons.Default.Warning
                 ) {
                     val notes = listOf(
-                        "确保服务器防火墙开放相应端口",
-                        "使用强密码和安全的认证令牌",
-                        "定期更新FRP版本以获得安全修复",
-                        "不要将敏感服务暴露到公网",
-                        "建议使用HTTPS保护网站服务"
+                        stringResource(R.string.help_note1),
+                        stringResource(R.string.help_note2),
+                        stringResource(R.string.help_note3),
+                        stringResource(R.string.help_note4),
+                        stringResource(R.string.help_note5)
                     )
                     
                     notes.forEach { note ->
@@ -185,7 +180,7 @@ remote_port = 6000"""
         },
         confirmButton = {
             Button(onClick = onDismiss) {
-                Text("知道了")
+                Text(stringResource(R.string.help_got_it))
             }
         }
     )
@@ -258,7 +253,7 @@ fun ServiceHelpItem(
         )
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = type.displayName,
+                text = stringResource(type.displayNameRes),
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Medium
             )

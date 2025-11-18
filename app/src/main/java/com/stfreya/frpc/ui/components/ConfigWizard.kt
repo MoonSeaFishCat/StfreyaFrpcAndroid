@@ -39,15 +39,19 @@ data class ServiceInfo(
     val remotePort: String = ""
 )
 
-enum class ServiceType(val displayName: String, val example: String, val frpType: String) {
-    HTTP("网站服务 (HTTP)", "例如：80, 8080, 3000", "http"),
-    SSH("SSH远程连接", "默认22", "tcp"),
-    RDP("远程桌面 (RDP)", "默认3389", "tcp"),
-    TCP("TCP服务", "自定义端口", "tcp"),
-    UDP("UDP服务", "自定义端口", "udp"),
-    HTTPS("HTTPS服务", "例如：443, 8443", "https"),
-    STCP("安全TCP", "点对点连接", "stcp"),
-    SUDP("安全UDP", "点对点连接", "sudp")
+enum class ServiceType(
+    val displayNameRes: Int,
+    val exampleRes: Int,
+    val frpType: String
+) {
+    HTTP(R.string.service_type_http, R.string.service_type_http_example, "http"),
+    SSH(R.string.service_type_ssh, R.string.service_type_ssh_example, "tcp"),
+    RDP(R.string.service_type_rdp, R.string.service_type_rdp_example, "tcp"),
+    TCP(R.string.service_type_tcp, R.string.service_type_tcp_example, "tcp"),
+    UDP(R.string.service_type_udp, R.string.service_type_udp_example, "udp"),
+    HTTPS(R.string.service_type_https, R.string.service_type_https_example, "https"),
+    STCP(R.string.service_type_stcp, R.string.service_type_stcp_example, "stcp"),
+    SUDP(R.string.service_type_sudp, R.string.service_type_sudp_example, "sudp")
 }
 
 @Composable
@@ -68,7 +72,7 @@ fun ConfigWizard(
         ),
         WizardStep(
             title = stringResource(R.string.server_info),
-            description = "配置服务器连接信息",
+            description = stringResource(R.string.server_help),
             icon = Icons.Default.Cloud
         ),
         WizardStep(
@@ -389,12 +393,12 @@ fun TemplateCard(
             
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = type.displayName,
+                    text = stringResource(type.displayNameRes),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Medium
                 )
                 Text(
-                    text = type.example,
+                    text = stringResource(type.exampleRes),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -474,7 +478,7 @@ fun ServerInfoStep(
             },
             supportingText = {
                 Text(
-                    text = "如果服务器启用了认证，请输入 token；否则留空",
+                    text = stringResource(R.string.server_token_hint),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

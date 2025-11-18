@@ -35,7 +35,6 @@
     <!-- Status and Overview -->
     <string name="status_overview">状态概览</string>
     <string name="frpc_configurations">FRPC 配置</string>
-    <string name="frps_configurations">FRPS 配置</string>
     <string name="running">运行中</string>
     <string name="startup_description">开机时自动启动配置</string>
     <string name="auto_start_description">开机时自动启动此配置</string>
@@ -79,7 +78,6 @@
     
     <!-- Feature descriptions -->
     <string name="frpc_support">运行 FRP 客户端配置</string>
-    <string name="frps_support">运行 FRP 服务端配置</string>
     <string name="auto_start_feature">开机时启动配置</string>
     <string name="background_service">可靠的后台执行</string>
     <string name="modern_ui">Material 3 设计语言</string>
@@ -100,7 +98,6 @@
     <string name="choose_config_type">选择配置类型</string>
     <string name="choose_config_description">选择您要创建的配置类型：</string>
     <string name="frpc">FRPC</string>
-    <string name="frps">FRPS</string>
     
     <!-- 配置向导 -->
     <string name="config_wizard">配置向导</string>
@@ -153,4 +150,72 @@
     <string name="server_help_content">您需要一台具有公网IP的服务器来运行FRP服务端。\n\n• 服务器地址: 您的服务器IP或域名\n• 端口: 通常使用7000\n• 令牌: 用于安全验证，请与服务器端保持一致</string>
     <string name="service_help">服务配置说明</string>
     <string name="service_help_content">配置您要穿透的内网服务。\n\n• 本地端口: 内网设备上运行的服务端口\n• 远程端口: 通过公网访问时使用的端口\n• 服务名称: 用于标识不同的服务</string>
+    
+    <!-- 新增字符串资源 -->
+    <string name="config_created">配置已创建</string>
+    <string name="edit_config_file">编辑您的 %1$s 配置文件：</string>
+    <string name="enter_config_placeholder">在此输入您的配置...</string>
+    <string name="enter_new_name">请输入新名称：</string>
+    <string name="save_changes_title">保存更改？</string>
+    <string name="unsaved_changes_message">您有未保存的更改。关闭前是否要保存？</string>
+    <string name="security_error">安全错误：%1$s</string>
+    <string name="error_starting_frp">启动FRP时出错：%1$s</string>
+    <string name="no_configs_running">没有配置在运行</string>
+    <string name="running_configs">运行中的配置：\n%1$s</string>
+    <string name="no_configs_currently_running">当前没有配置在运行</string>
+    
+    <!-- 帮助对话框 -->
+    <string name="help_what_is_frp">什么是FRP？</string>
+    <string name="help_frp_description">FRP是一个高性能的反向代理应用，支持TCP、UDP、HTTP、HTTPS等协议。它可以帮助您将内网服务暴露到公网，实现内网穿透。</string>
+    <string name="help_common_scenarios">常用场景</string>
+    <string name="help_http_scenario">将内网网站服务暴露到公网，让外网用户可以访问您的网站</string>
+    <string name="help_ssh_scenario">通过公网SSH连接到内网设备，进行远程管理</string>
+    <string name="help_rdp_scenario">通过公网远程桌面连接到内网Windows设备</string>
+    <string name="help_tcp_scenario">其他TCP服务的内网穿透</string>
+    <string name="help_udp_scenario">UDP服务的内网穿透</string>
+    <string name="help_https_scenario">HTTPS网站服务的内网穿透</string>
+    <string name="help_stcp_scenario">安全TCP点对点连接</string>
+    <string name="help_sudp_scenario">安全UDP点对点连接</string>
+    <string name="help_config_steps">配置步骤</string>
+    <string name="help_step1_title">准备服务器</string>
+    <string name="help_step1_desc">需要一台具有公网IP的服务器，并在服务器上运行FRP服务端（frps），设置好端口和认证令牌</string>
+    <string name="help_step2_title">配置客户端</string>
+    <string name="help_step2_desc">使用本应用配置frpc，连接服务器并设置要穿透的服务</string>
+    <string name="help_step3_title">开始使用</string>
+    <string name="help_step3_desc">启动配置，通过公网地址访问内网服务</string>
+    <string name="help_config_examples">配置示例</string>
+    <string name="help_example_web_title">网站服务穿透</string>
+    <string name="help_example_ssh_title">SSH远程连接</string>
+    <string name="help_notes_title">注意事项</string>
+    <string name="help_note1">确保服务器防火墙开放相应端口</string>
+    <string name="help_note2">使用强密码和安全的认证令牌</string>
+    <string name="help_note3">定期更新FRP版本以获得安全修复</string>
+    <string name="help_note4">不要将敏感服务暴露到公网</string>
+    <string name="help_note5">建议使用HTTPS保护网站服务</string>
+    <string name="help_got_it">知道了</string>
+    
+    <!-- 服务类型 -->
+    <string name="service_type_http">网站服务 (HTTP)</string>
+    <string name="service_type_ssh">SSH远程连接</string>
+    <string name="service_type_rdp">远程桌面 (RDP)</string>
+    <string name="service_type_tcp">TCP服务</string>
+    <string name="service_type_udp">UDP服务</string>
+    <string name="service_type_https">HTTPS服务</string>
+    <string name="service_type_stcp">安全TCP</string>
+    <string name="service_type_sudp">安全UDP</string>
+    <string name="service_type_http_example">例如：80, 8080, 3000</string>
+    <string name="service_type_ssh_example">默认22</string>
+    <string name="service_type_rdp_example">默认3389</string>
+    <string name="service_type_tcp_example">自定义端口</string>
+    <string name="service_type_udp_example">自定义端口</string>
+    <string name="service_type_https_example">例如：443, 8443</string>
+    <string name="service_type_stcp_example">点对点连接</string>
+    <string name="service_type_sudp_example">点对点连接</string>
+    
+    <!-- 进程守护 -->
+    <string name="process_guard_enabled">进程守护已启用</string>
+    <string name="process_restarting">FRP进程异常退出，正在自动重启...</string>
+    <string name="process_restart_failed">FRP进程重启失败，请检查配置</string>
+    <string name="process_restart_success">FRP进程已成功重启</string>
+    <string name="process_guard_restart_count">重启次数：%1$d</string>
 </resources>

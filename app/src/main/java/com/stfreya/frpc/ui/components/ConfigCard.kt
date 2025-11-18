@@ -155,7 +155,6 @@ private fun ConfigActions(
 @Composable
 fun StatusOverviewCard(
     frpcCount: Int,
-    frpsCount: Int,
     runningCount: Int,
     modifier: Modifier = Modifier
 ) {
@@ -184,12 +183,6 @@ fun StatusOverviewCard(
                     count = frpcCount,
                     icon = Icons.Default.CloudUpload,
                     color = MaterialTheme.colorScheme.primary
-                )
-                StatusItem(
-                    label = stringResource(R.string.frps),
-                    count = frpsCount,
-                    icon = Icons.Default.CloudDownload,
-                    color = MaterialTheme.colorScheme.secondary
                 )
                 StatusItem(
                     label = stringResource(R.string.running),

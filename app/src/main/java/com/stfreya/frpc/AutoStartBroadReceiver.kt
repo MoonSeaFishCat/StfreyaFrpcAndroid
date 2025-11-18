@@ -14,10 +14,8 @@ class AutoStartBroadReceiver : BroadcastReceiver() {
         val auto_start = editor.getBoolean(PreferencesKey.AUTO_START, false)
         if (ACTION == intent.action && auto_start) {
             val frpcConfigSet = editor.getStringSet(PreferencesKey.AUTO_START_FRPC_LIST, emptySet())
-            val frpsConfigSet = editor.getStringSet(PreferencesKey.AUTO_START_FRPS_LIST, emptySet())
             val frpcConfigList = frpcConfigSet?.map { FrpConfig(FrpType.FRPC, it) }
-            val frpsConfigList = frpsConfigSet?.map { FrpConfig(FrpType.FRPS, it) }
-            val configList = (frpsConfigList ?: emptyList()) + (frpcConfigList ?: emptyList())
+            val configList = frpcConfigList ?: emptyList()
             if (configList.isEmpty()) return
             //开机启动
             val mainIntent = Intent(context, ShellService::class.java)

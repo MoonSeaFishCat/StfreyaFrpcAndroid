@@ -21,9 +21,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _frpcConfigList = MutableStateFlow<List<FrpConfig>>(emptyList())
     val frpcConfigList: StateFlow<List<FrpConfig>> = _frpcConfigList.asStateFlow()
     
-    private val _frpsConfigList = MutableStateFlow<List<FrpConfig>>(emptyList())
-    val frpsConfigList: StateFlow<List<FrpConfig>> = _frpsConfigList.asStateFlow()
-    
     private val _runningConfigList = MutableStateFlow<List<FrpConfig>>(emptyList())
     val runningConfigList: StateFlow<List<FrpConfig>> = _runningConfigList.asStateFlow()
     
@@ -48,9 +45,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 val context = getApplication<Application>()
                 _frpcConfigList.value = (FrpType.FRPC.getDir(context).list()?.toList() ?: listOf()).map {
                     FrpConfig(FrpType.FRPC, it)
-                }
-                _frpsConfigList.value = (FrpType.FRPS.getDir(context).list()?.toList() ?: listOf()).map {
-                    FrpConfig(FrpType.FRPS, it)
                 }
                 
                 // 清理无效的自启动配置
@@ -88,13 +82,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val frpcAutoStartList = preferences.getStringSet(PreferencesKey.AUTO_START_FRPC_LIST, emptySet())?.filter {
             _frpcConfigList.value.any { config -> config.fileName == it }
         }
-        val frpsAutoStartList = preferences.getStringSet(PreferencesKey.AUTO_START_FRPS_LIST, emptySet())?.filter {
-            _frpsConfigList.value.any { config -> config.fileName == it }
-        }
         
         preferences.edit().apply {
             putStringSet(PreferencesKey.AUTO_START_FRPC_LIST, frpcAutoStartList?.toSet())
-            putStringSet(PreferencesKey.AUTO_START_FRPS_LIST, frpsAutoStartList?.toSet())
             apply()
         }
     }

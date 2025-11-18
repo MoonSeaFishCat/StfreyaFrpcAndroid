@@ -11,7 +11,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
-import android.util.Log
+import com.stfreya.frpc.utils.Logger
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -85,7 +85,6 @@ class MainActivity : ComponentActivity() {
     private val isStartup = kotlinx.coroutines.flow.MutableStateFlow(false)
     private val logText = kotlinx.coroutines.flow.MutableStateFlow("")
     private val frpcConfigList = kotlinx.coroutines.flow.MutableStateFlow<List<FrpConfig>>(emptyList())
-    private val frpsConfigList = kotlinx.coroutines.flow.MutableStateFlow<List<FrpConfig>>(emptyList())
     private val runningConfigList = kotlinx.coroutines.flow.MutableStateFlow<List<FrpConfig>>(emptyList())
 
     private lateinit var preferences: SharedPreferences
@@ -151,7 +150,6 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun MainScreen() {
         val frpcConfigList by frpcConfigList.collectAsStateWithLifecycle(emptyList())
-        val frpsConfigList by frpsConfigList.collectAsStateWithLifecycle(emptyList())
         val runningConfigList by runningConfigList.collectAsStateWithLifecycle(emptyList())
         val logText by logText.collectAsStateWithLifecycle("")
         val isStartupState by isStartup.collectAsStateWithLifecycle(false)
@@ -234,7 +232,6 @@ class MainActivity : ComponentActivity() {
                 item {
                     StatusOverviewCard(
                         frpcCount = frpcConfigList.size,
-                        frpsCount = frpsConfigList.size,
                         runningCount = runningConfigList.size
                     )
                 }
@@ -261,30 +258,8 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
-                // FRPS Configurations
-                if (frpsConfigList.isNotEmpty()) {
-                    item {
-                        ConfigSectionHeader(
-                            title = stringResource(R.string.frps_configurations),
-                            icon = Icons.Default.CloudDownload,
-                            count = frpsConfigList.size
-                        )
-                    }
-                    items(frpsConfigList) { config ->
-                        ConfigItemCard(
-                            config = config,
-                            isRunning = runningConfigList.contains(config),
-                            onStartStop = { isRunning ->
-                                if (isRunning) startShell(config) else stopShell(config)
-                            },
-                            onEdit = { startConfigActivity(config) },
-                            onDelete = { deleteConfig(config) }
-                        )
-                    }
-                }
-
                 // Empty State
-                if (frpcConfigList.isEmpty() && frpsConfigList.isEmpty()) {
+                if (frpcConfigList.isEmpty()) {
                     item {
                         EmptyStateCard(
                             onAddConfig = { showCreateDialog = true }
@@ -300,10 +275,6 @@ class MainActivity : ComponentActivity() {
                 onDismiss = { showCreateDialog = false },
                 onFrpcSelected = { 
                     startConfigActivity(FrpType.FRPC)
-                    showCreateDialog = false 
-                },
-                onFrpsSelected = { 
-                    startConfigActivity(FrpType.FRPS)
                     showCreateDialog = false 
                 },
                 onWizardSelected = {
@@ -338,7 +309,7 @@ class MainActivity : ComponentActivity() {
                     this@MainActivity.frpcConfigList.value = newList
                     
                     showConfigWizard = false
-                    Toast.makeText(this@MainActivity, "配置已创建", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainActivity, getString(R.string.config_created), Toast.LENGTH_SHORT).show()
                 },
                 onDismiss = { showConfigWizard = false }
             )
@@ -418,7 +389,6 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun StatusOverviewCard(
         frpcCount: Int,
-        frpsCount: Int,
         runningCount: Int
     ) {
         Card(
@@ -446,12 +416,6 @@ class MainActivity : ComponentActivity() {
                         count = frpcCount,
                         icon = Icons.Default.CloudUpload,
                         color = MaterialTheme.colorScheme.primary
-                    )
-                    StatusItem(
-                        label = stringResource(R.string.frps),
-                        count = frpsCount,
-                        icon = Icons.Default.CloudDownload,
-                        color = MaterialTheme.colorScheme.secondary
                     )
                     StatusItem(
                         label = stringResource(R.string.running),
@@ -679,7 +643,6 @@ class MainActivity : ComponentActivity() {
     fun CreateConfigDialog(
         onDismiss: () -> Unit,
         onFrpcSelected: () -> Unit,
-        onFrpsSelected: () -> Unit,
         onWizardSelected: () -> Unit
     ) {
         AlertDialog(
@@ -737,29 +700,15 @@ class MainActivity : ComponentActivity() {
                 }
             },
             confirmButton = {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                OutlinedButton(
+                    onClick = onFrpcSelected,
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        contentColor = MaterialTheme.colorScheme.primary
+                    )
                 ) {
-                    OutlinedButton(
-                        onClick = onFrpcSelected,
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            contentColor = MaterialTheme.colorScheme.primary
-                        )
-                    ) {
-                        Icon(Icons.Default.CloudUpload, contentDescription = null)
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(stringResource(R.string.frpc))
-                    }
-                    OutlinedButton(
-                        onClick = onFrpsSelected,
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            contentColor = MaterialTheme.colorScheme.secondary
-                        )
-                    ) {
-                        Icon(Icons.Default.CloudDownload, contentDescription = null)
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(stringResource(R.string.frps))
-                    }
+                    Icon(Icons.Default.CloudUpload, contentDescription = null)
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(stringResource(R.string.frpc))
                 }
             },
             dismissButton = {
@@ -842,7 +791,6 @@ class MainActivity : ComponentActivity() {
         isStartup.value = false
         logText.value = ""
         frpcConfigList.value = emptyList()
-        frpsConfigList.value = emptyList()
         runningConfigList.value = emptyList()
     }
 
@@ -852,19 +800,14 @@ class MainActivity : ComponentActivity() {
             frpcDir.delete()
         }
         if (!frpcDir.exists()) frpcDir.mkdirs()
-        val frpsDir = FrpType.FRPS.getDir(this)
-        if (frpsDir.exists() && !frpsDir.isDirectory) {
-            frpsDir.delete()
-        }
-        if (!frpsDir.exists()) frpsDir.mkdirs()
         // v1.1旧版本配置迁移
         this.filesDir.listFiles()?.forEach { file ->
             if (file.isFile && file.name.endsWith(".toml")) {
                 val destination = File(frpcDir, file.name)
                 if (file.renameTo(destination)) {
-                    Log.d("adx", "Moved: ${file.name} to ${destination.absolutePath}")
+                    Logger.d("已移动: ${file.name} 到 ${destination.absolutePath}")
                 } else {
-                    Log.e("adx", "Failed to move: ${file.name}")
+                    Logger.e("移动失败: ${file.name}")
                 }
             }
         }
@@ -897,7 +840,7 @@ class MainActivity : ComponentActivity() {
 
     private fun startShell(config: FrpConfig) {
         if (runningConfigList.value.contains(config)) {
-            Log.w("adx", "Config ${config.fileName} is already running")
+            Logger.w("配置 ${config.fileName} 已在运行")
             return
         }
         val intent = Intent(this, ShellService::class.java)
@@ -908,7 +851,7 @@ class MainActivity : ComponentActivity() {
 
     private fun stopShell(config: FrpConfig) {
         if (!runningConfigList.value.contains(config)) {
-            Log.w("adx", "Config ${config.fileName} is not running")
+            Logger.w("配置 ${config.fileName} 未在运行")
             return
         }
         val intent = Intent(this, ShellService::class.java)
@@ -951,9 +894,6 @@ class MainActivity : ComponentActivity() {
         frpcConfigList.value = (FrpType.FRPC.getDir(this).list()?.toList() ?: listOf()).map {
             FrpConfig(FrpType.FRPC, it)
         }
-        frpsConfigList.value = (FrpType.FRPS.getDir(this).list()?.toList() ?: listOf()).map {
-            FrpConfig(FrpType.FRPS, it)
-        }
 
         // 检查自启动列表中是否含有已经删除的配置
         val frpcAutoStartList =
@@ -964,16 +904,6 @@ class MainActivity : ComponentActivity() {
             }
         with(preferences.edit()) {
             putStringSet(PreferencesKey.AUTO_START_FRPC_LIST, frpcAutoStartList?.toSet())
-            apply()
-        }
-        val frpsAutoStartList =
-            preferences.getStringSet(PreferencesKey.AUTO_START_FRPS_LIST, emptySet())?.filter {
-                frpsConfigList.value.contains(
-                    FrpConfig(FrpType.FRPS, it)
-                )
-            }
-        with(preferences.edit()) {
-            putStringSet(PreferencesKey.AUTO_START_FRPS_LIST, frpsAutoStartList?.toSet())
             apply()
         }
     }

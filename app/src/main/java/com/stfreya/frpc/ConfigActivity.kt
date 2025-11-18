@@ -3,7 +3,7 @@ package com.stfreya.frpc
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
+import com.stfreya.frpc.utils.Logger
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -49,8 +49,8 @@ class ConfigActivity : ComponentActivity() {
             @Suppress("DEPRECATION") intent?.extras?.getParcelable(IntentExtraKey.FrpConfig)
         }
         if (frpConfig == null) {
-            Log.e("adx", "frp config is null")
-            Toast.makeText(this, "frp config is null", Toast.LENGTH_SHORT).show()
+            Logger.e("frp配置为空")
+            Toast.makeText(this, getString(R.string.frp_config_null), Toast.LENGTH_SHORT).show()
             setResult(RESULT_CANCELED)
             finish()
             return
@@ -213,7 +213,7 @@ class ConfigActivity : ComponentActivity() {
                         }
                         Spacer(modifier = Modifier.height(12.dp))
                         Text(
-                            text = "Edit your ${configFile.name} configuration file:",
+                            text = getString(R.string.edit_config_file, configFile.name),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -233,7 +233,7 @@ class ConfigActivity : ComponentActivity() {
                             ),
                             placeholder = {
                                 Text(
-                                    text = "Enter your configuration here...",
+                                    text = stringResource(R.string.enter_config_placeholder),
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             },
@@ -332,7 +332,7 @@ class ConfigActivity : ComponentActivity() {
             text = {
                 Column {
                     Text(
-                        text = "Enter a new name for this configuration:",
+                        text = stringResource(R.string.enter_new_name),
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Spacer(modifier = Modifier.height(12.dp))
@@ -371,13 +371,13 @@ class ConfigActivity : ComponentActivity() {
             onDismissRequest = onDismiss,
             title = {
                 Text(
-                    text = "Save Changes?",
+                    text = stringResource(R.string.save_changes_title),
                     style = MaterialTheme.typography.headlineSmall
                 )
             },
             text = {
                 Text(
-                    text = "You have unsaved changes. Do you want to save them before closing?",
+                    text = stringResource(R.string.unsaved_changes_message),
                     style = MaterialTheme.typography.bodyMedium
                 )
             },
@@ -400,12 +400,12 @@ class ConfigActivity : ComponentActivity() {
                 val content = configFile.readText()
                 configEditText.value = TextFieldValue(content)
             } else {
-                Log.e("adx", "config file does not exist")
+                Logger.e("配置文件不存在")
                 Toast.makeText(this, getString(R.string.config_file_not_exist), Toast.LENGTH_SHORT).show()
             }
         } catch (e: Exception) {
-            Log.e("adx", "Error reading config file", e)
-            Toast.makeText(this, "Error reading config file: ${e.message}", Toast.LENGTH_SHORT).show()
+            Logger.e("读取配置文件时出错", e)
+            Toast.makeText(this, getString(R.string.error_starting_frp, e.message ?: ""), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -415,8 +415,8 @@ class ConfigActivity : ComponentActivity() {
             hasUnsavedChanges = false
             Toast.makeText(this, getString(R.string.configuration_saved), Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
-            Log.e("adx", "Error saving config file", e)
-            Toast.makeText(this, "Error saving config file: ${e.message}", Toast.LENGTH_SHORT).show()
+            Logger.e("保存配置文件时出错", e)
+            Toast.makeText(this, getString(R.string.error_starting_frp, e.message ?: ""), Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -130,9 +130,7 @@
     <string name="service_help">Service Configuration Instructions</string>
     <string name="service_help_content">Configure the intranet service you want to penetrate.\n\n• Local Port: The service port running on the intranet device\n• Remote Port: The port used for public network access\n• Service Name: Used to identify different services</string>
     <string name="frpc_configurations">FRPC 配置</string>
-    <string name="frps_configurations">FRPS 配置</string>
     <string name="frpc">FRPC</string>
-    <string name="frps">FRPS</string>
     <string name="dismiss">关闭</string>
     <string name="back">返回</string>
     <string name="app_subtitle">现代 FRP 客户端 for Android</string>
@@ -147,8 +145,6 @@
     <string name="features">功能特性</string>
     <string name="frpc_support">FRPC 支持</string>
     <string name="frpc_support_desc">运行 FRP 客户端配置</string>
-    <string name="frps_support">FRPS 支持</string>
-    <string name="frps_support_desc">运行 FRP 服务端配置</string>
     <string name="auto_start">自动启动</string>
     <string name="auto_start_desc">开机时自动启动配置</string>
     <string name="background_service">后台服务</string>

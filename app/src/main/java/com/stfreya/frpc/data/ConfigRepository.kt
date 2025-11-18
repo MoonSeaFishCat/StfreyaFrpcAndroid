@@ -14,7 +14,7 @@ class ConfigRepository(private val context: Context) {
     private val fileCache = ConcurrentHashMap<String, File>()
     
     suspend fun getAllConfigs(): List<FrpConfig> = withContext(Dispatchers.IO) {
-        val frpcConfigs = FrpType.FRPC.getDir(context).listFiles()
+        FrpType.FRPC.getDir(context).listFiles()
             ?.filter { it.isFile && it.name.endsWith(".toml") }
             ?.map { file ->
                 val config = FrpConfig(FrpType.FRPC, file.name)
@@ -22,17 +22,6 @@ class ConfigRepository(private val context: Context) {
                 fileCache[file.absolutePath] = file
                 config
             } ?: emptyList()
-            
-        val frpsConfigs = FrpType.FRPS.getDir(context).listFiles()
-            ?.filter { it.isFile && it.name.endsWith(".toml") }
-            ?.map { file ->
-                val config = FrpConfig(FrpType.FRPS, file.name)
-                configCache[file.absolutePath] = config
-                fileCache[file.absolutePath] = file
-                config
-            } ?: emptyList()
-            
-        frpcConfigs + frpsConfigs
     }
     
     suspend fun getConfigFile(config: FrpConfig): File = withContext(Dispatchers.IO) {

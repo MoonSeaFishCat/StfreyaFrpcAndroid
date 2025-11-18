@@ -7,16 +7,15 @@ import android.content.pm.PackageManager
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
-import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
+import com.stfreya.frpc.utils.Logger
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.io.File
-import java.util.Random
 
 
 class ShellService : LifecycleService() {
@@ -30,6 +29,7 @@ class ShellService : LifecycleService() {
     val serviceState = _serviceState.asStateFlow()
     
     private var isServiceDestroyed = false
+    private var processGuard: ProcessGuard? = null
     
     enum class ServiceState {
         STARTING, RUNNING, STOPPING, STOPPED, ERROR
@@ -41,13 +41,6 @@ class ShellService : LifecycleService() {
 
     // Binder given to clients
     private val binder = LocalBinder()
-
-    // Random number generator
-    private val mGenerator = Random()
-
-    /** method for clients  */
-    val randomNumber: Int
-        get() = mGenerator.nextInt(100)
 
     /**
      * Class used for the client Binder.  Because we know this service always
@@ -67,8 +60,24 @@ class ShellService : LifecycleService() {
         super.onStartCommand(intent, flags, startId)
         
         if (isServiceDestroyed) {
-            Log.w("adx", "Service is being destroyed, ignoring start command")
+            Logger.w("服务正在销毁，忽略启动命令")
             return START_NOT_STICKY
+        }
+        
+        // 初始化进程守护
+        if (processGuard == null) {
+            processGuard = ProcessGuard(
+                context = this,
+                onProcessExit = { config ->
+                    _logText.value += getString(R.string.process_restarting) + "\n"
+                    Logger.i("配置 ${config.fileName} 的进程退出，准备重启")
+                },
+                onRestartFailed = { config, count ->
+                    _logText.value += getString(R.string.process_restart_failed) + "\n"
+                    Logger.e("配置 ${config.fileName} 重启失败，已达到最大重启次数: $count")
+                    Toast.makeText(this, getString(R.string.process_restart_failed), Toast.LENGTH_LONG).show()
+                }
+            )
         }
         
         val frpConfig: ArrayList<FrpConfig>? =
@@ -80,7 +89,7 @@ class ShellService : LifecycleService() {
                 @Suppress("DEPRECATION") intent?.extras?.getParcelableArrayList(IntentExtraKey.FrpConfig)
             }
         if (frpConfig == null) {
-            Log.e("adx", "frpConfig is null")
+            Logger.e("frpConfig 为空")
             _serviceState.value = ServiceState.ERROR
             Toast.makeText(this, getString(R.string.frp_config_null), Toast.LENGTH_SHORT).show()
             return START_NOT_STICKY
@@ -98,7 +107,7 @@ class ShellService : LifecycleService() {
                         .show()
                     startForeground(1, showNotification())
                 } catch (e: Exception) {
-                    Log.e("adx", "Error starting service", e)
+                    Logger.e("启动服务时出错", e)
                     _serviceState.value = ServiceState.ERROR
                 }
             }
@@ -124,7 +133,7 @@ class ShellService : LifecycleService() {
                         _serviceState.value = ServiceState.RUNNING
                     }
                 } catch (e: Exception) {
-                    Log.e("adx", "Error stopping service", e)
+                    Logger.e("停止服务时出错", e)
                     _serviceState.value = ServiceState.ERROR
                 }
             }
@@ -133,18 +142,18 @@ class ShellService : LifecycleService() {
     }
 
     private fun startFrp(config: FrpConfig) {
-        Log.d("adx", "start config is $config")
+        Logger.d("启动配置: $config")
         val dir = config.getDir(this)
         val file = config.getFile(this)
         
         if (!file.exists()) {
-            Log.w("adx", "Config file does not exist: ${file.absolutePath}")
+            Logger.w("配置文件不存在: ${file.absolutePath}")
             Toast.makeText(this, getString(R.string.file_not_exist), Toast.LENGTH_SHORT).show()
             return
         }
         
         if (_processThreads.value.contains(config)) {
-            Log.w("adx", "FRP is already running for config: ${config.fileName}")
+            Logger.w("配置 ${config.fileName} 已在运行")
             Toast.makeText(this, getString(R.string.frp_already_running), Toast.LENGTH_SHORT).show()
             return
         }
@@ -158,29 +167,38 @@ class ShellService : LifecycleService() {
                 "-c", 
                 config.fileName
             )
-            Log.d("adx", "Starting FRP with command: ${commandList.joinToString(" ")}")
-            Log.d("adx", "Working directory: ${dir.absolutePath}")
+            Logger.d("启动FRP命令: ${commandList.joinToString(" ")}")
+            Logger.d("工作目录: ${dir.absolutePath}")
             
             val thread = runCommand(commandList, dir)
             _processThreads.update { it.toMutableMap().apply { put(config, thread) } }
-            Log.i("adx", "Successfully started FRP for config: ${config.fileName}")
+            
+            // 启动进程守护
+            processGuard?.startMonitoring(config, thread)
+            processGuard?.resetRestartCount(config)
+            
+            Logger.i("成功启动配置: ${config.fileName}")
+            _logText.value += getString(R.string.process_guard_enabled) + "\n"
             
         } catch (e: SecurityException) {
-            Log.e("adx", "Security error starting FRP", e)
-            Toast.makeText(this, "Security error: ${e.message}", Toast.LENGTH_LONG).show()
+            Logger.e("启动FRP时安全错误", e)
+            Toast.makeText(this, getString(R.string.security_error, e.message ?: ""), Toast.LENGTH_LONG).show()
         } catch (e: Exception) {
-            Log.e("adx", "Error starting FRP", e)
-            Toast.makeText(this, "Error starting FRP: ${e.message}", Toast.LENGTH_LONG).show()
+            Logger.e("启动FRP时出错", e)
+            Toast.makeText(this, getString(R.string.error_starting_frp, e.message ?: ""), Toast.LENGTH_LONG).show()
         }
     }
 
     private fun stopFrp(config: FrpConfig) {
+        // 停止进程守护
+        processGuard?.stopMonitoring(config)
+        
         val thread = _processThreads.value.get(config)
-//        thread?.interrupt()
         thread?.stopProcess()
         _processThreads.update {
             it.toMutableMap().apply { remove(config) }
         }
+        Logger.i("已停止配置: ${config.fileName}")
     }
 
     override fun onDestroy() {
@@ -188,13 +206,17 @@ class ShellService : LifecycleService() {
         isServiceDestroyed = true
         _serviceState.value = ServiceState.STOPPING
         
+        // 停止所有进程守护
+        processGuard?.stopAll()
+        processGuard = null
+        
         if (!_processThreads.value.isEmpty()) {
             _processThreads.value.forEach { (config, thread) ->
                 try {
                     thread.stopProcess()
-                    Log.d("adx", "Stopped process for config: ${config.fileName}")
+                    Logger.d("已停止配置: ${config.fileName}")
                 } catch (e: Exception) {
-                    Log.e("adx", "Error stopping process for ${config.fileName}", e)
+                    Logger.e("停止配置 ${config.fileName} 时出错", e)
                 }
             }
             _processThreads.update { mutableMapOf() }
@@ -227,16 +249,16 @@ class ShellService : LifecycleService() {
                 if (runningCount > 0) {
                     getString(R.string.frp_notification_content, runningCount)
                 } else {
-                    "No configurations running"
+                    getString(R.string.no_configs_running)
                 }
             )
             .setStyle(
                 NotificationCompat.BigTextStyle()
                     .bigText(
                         if (runningCount > 0) {
-                            "Running configurations:\n" + runningConfigs.joinToString("\n") { it.fileName }
+                            getString(R.string.running_configs, runningConfigs.joinToString("\n") { it.fileName })
                         } else {
-                            "No configurations are currently running"
+                            getString(R.string.no_configs_currently_running)
                         }
                     )
             )

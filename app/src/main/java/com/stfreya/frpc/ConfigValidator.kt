@@ -1,11 +1,9 @@
 package com.stfreya.frpc
 
-import android.util.Log
+import com.stfreya.frpc.utils.Logger
 import java.io.File
 
 object ConfigValidator {
-    
-    private const val TAG = "ConfigValidator"
     
     data class ValidationResult(
         val isValid: Boolean,
@@ -33,13 +31,10 @@ object ConfigValidator {
             validateTomlFormat(content, errors, warnings)
             
             // FRP特定配置检查
-            when (config.type) {
-                FrpType.FRPC -> validateFrpcConfig(content, errors, warnings)
-                FrpType.FRPS -> validateFrpsConfig(content, errors, warnings)
-            }
+            validateFrpcConfig(content, errors, warnings)
             
         } catch (e: Exception) {
-            Log.e(TAG, "Error validating config", e)
+            Logger.e("验证配置时出错", e)
             errors.add("Error reading configuration file: ${e.message}")
         }
         
@@ -105,30 +100,6 @@ object ConfigValidator {
         val proxySections = content.split("[[proxies]]").size - 1
         if (proxySections == 0) {
             warnings.add("No proxy configurations found - FRPC may not be useful without proxies")
-        }
-    }
-    
-    private fun validateFrpsConfig(content: String, errors: MutableList<String>, warnings: MutableList<String>) {
-        // 检查必需的FRPS配置项
-        val requiredSections = listOf("bindPort")
-        val missingRequired = requiredSections.filter { !content.contains(it) }
-        
-        if (missingRequired.isNotEmpty()) {
-            errors.add("Missing required FRPS configuration: ${missingRequired.joinToString(", ")}")
-        }
-        
-        // 检查绑定端口
-        val portMatch = Regex("bindPort\\s*=\\s*(\\d+)").find(content)
-        if (portMatch != null) {
-            val port = portMatch.groupValues[1].toIntOrNull()
-            if (port == null || port <= 0 || port > 65535) {
-                errors.add("Invalid bind port: $port")
-            }
-        }
-        
-        // 检查认证配置
-        if (content.contains("auth.token") && !content.contains("auth.method")) {
-            warnings.add("Token authentication configured but method not specified")
         }
     }
     

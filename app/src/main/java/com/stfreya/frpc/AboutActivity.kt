@@ -236,11 +236,6 @@ class AboutActivity : ComponentActivity() {
                     description = stringResource(R.string.frpc_support_desc)
                 )
                 FeatureItem(
-                    icon = Icons.Default.CloudDownload,
-                    title = stringResource(R.string.frps_support),
-                    description = stringResource(R.string.frps_support_desc)
-                )
-                FeatureItem(
                     icon = Icons.Default.PowerSettingsNew,
                     title = stringResource(R.string.auto_start),
                     description = stringResource(R.string.auto_start_desc)

@@ -50,9 +50,7 @@ android {
 
         buildConfigField("String", "FrpVersion", "\"0.65.0\"")
         buildConfigField("String", "FrpcFileName", "\"libfrpc.so\"")
-        buildConfigField("String", "FrpsFileName", "\"libfrps.so\"")
         buildConfigField("String", "FrpcConfigFileName", "\"frpc.toml\"")
-        buildConfigField("String", "FrpsConfigFileName", "\"frps.toml\"")
     }
 
     buildTypes {
