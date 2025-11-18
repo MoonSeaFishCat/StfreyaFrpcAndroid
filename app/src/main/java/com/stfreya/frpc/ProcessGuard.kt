@@ -7,7 +7,6 @@ import android.os.Handler
 import android.os.Looper
 import com.stfreya.frpc.utils.Logger
 import kotlinx.coroutines.*
-import kotlinx.coroutines.ensureActive
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -69,8 +68,7 @@ class ProcessGuard(
     private suspend fun monitorProcess(config: FrpConfig, shellThread: ShellThread) {
         try {
             while (true) {
-                delay(checkInterval)
-                coroutineContext.ensureActive() // 检查协程是否被取消
+                delay(checkInterval) // delay 会在协程被取消时抛出 CancellationException
                 
                 // 检查线程是否存活
                 if (!shellThread.isAlive) {
@@ -86,8 +84,7 @@ class ProcessGuard(
                     }
                     
                     // 延迟后重启
-                    delay(restartDelay)
-                    coroutineContext.ensureActive() // 再次检查协程是否被取消
+                    delay(restartDelay) // delay 会在协程被取消时抛出 CancellationException
                     restartProcess(config, restartCount + 1)
                 }
             }
