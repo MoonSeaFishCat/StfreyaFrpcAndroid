@@ -66,7 +66,7 @@ class ProcessGuard(
      * 监控进程状态
      */
     private suspend fun monitorProcess(config: FrpConfig, shellThread: ShellThread) {
-        while (isActive) {
+        while (coroutineContext.isActive) {
             delay(checkInterval)
             
             // 检查线程是否存活
@@ -84,7 +84,7 @@ class ProcessGuard(
                 
                 // 延迟后重启
                 delay(restartDelay)
-                if (isActive) {
+                if (coroutineContext.isActive) {
                     restartProcess(config, restartCount + 1)
                 }
             }

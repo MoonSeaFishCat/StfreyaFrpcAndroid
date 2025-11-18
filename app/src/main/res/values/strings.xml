@@ -165,4 +165,72 @@
     <string name="built_with">使用 ❤️ 构建，基于 Kotlin、Jetpack Compose 和 Material 3</string>
     <string name="license">许可证</string>
     <string name="license_content">本项目采用 GNU Affero General Public License v3.0 (AGPLv3) 许可证。FRP 项目采用 Apache License 2.0 许可证。</string>
+    
+    <!-- 新增字符串资源（默认值，中文版本在 values-zh 中） -->
+    <string name="config_created">Configuration created</string>
+    <string name="edit_config_file">Edit your %1$s configuration file:</string>
+    <string name="enter_config_placeholder">Enter your configuration here...</string>
+    <string name="enter_new_name">Enter a new name:</string>
+    <string name="save_changes_title">Save Changes?</string>
+    <string name="unsaved_changes_message">You have unsaved changes. Do you want to save them before closing?</string>
+    <string name="security_error">Security error: %1$s</string>
+    <string name="error_starting_frp">Error starting FRP: %1$s</string>
+    <string name="no_configs_running">No configurations running</string>
+    <string name="running_configs">Running configurations:\n%1$s</string>
+    <string name="no_configs_currently_running">No configurations are currently running</string>
+    
+    <!-- 帮助对话框 -->
+    <string name="help_what_is_frp">What is FRP?</string>
+    <string name="help_frp_description">FRP is a high-performance reverse proxy application that supports TCP, UDP, HTTP, HTTPS and other protocols. It can help you expose intranet services to the public network for intranet penetration.</string>
+    <string name="help_common_scenarios">Common Scenarios</string>
+    <string name="help_http_scenario">Expose intranet website services to the public network, allowing external users to access your website</string>
+    <string name="help_ssh_scenario">Connect to intranet devices via public network SSH for remote management</string>
+    <string name="help_rdp_scenario">Connect to intranet Windows devices via public network remote desktop</string>
+    <string name="help_tcp_scenario">Intranet penetration for other TCP services</string>
+    <string name="help_udp_scenario">Intranet penetration for UDP services</string>
+    <string name="help_https_scenario">Intranet penetration for HTTPS website services</string>
+    <string name="help_stcp_scenario">Secure TCP peer-to-peer connection</string>
+    <string name="help_sudp_scenario">Secure UDP peer-to-peer connection</string>
+    <string name="help_config_steps">Configuration Steps</string>
+    <string name="help_step1_title">Prepare Server</string>
+    <string name="help_step1_desc">You need a server with a public IP and run FRP server (frps) on it, set the port and authentication token</string>
+    <string name="help_step2_title">Configure Client</string>
+    <string name="help_step2_desc">Use this app to configure frpc, connect to the server and set the service to penetrate</string>
+    <string name="help_step3_title">Start Using</string>
+    <string name="help_step3_desc">Start the configuration and access intranet services through public network addresses</string>
+    <string name="help_config_examples">Configuration Examples</string>
+    <string name="help_example_web_title">Website Service Penetration</string>
+    <string name="help_example_ssh_title">SSH Remote Connection</string>
+    <string name="help_notes_title">Notes</string>
+    <string name="help_note1">Ensure the server firewall opens the corresponding ports</string>
+    <string name="help_note2">Use strong passwords and secure authentication tokens</string>
+    <string name="help_note3">Regularly update FRP version for security fixes</string>
+    <string name="help_note4">Do not expose sensitive services to the public network</string>
+    <string name="help_note5">It is recommended to use HTTPS to protect website services</string>
+    <string name="help_got_it">Got it</string>
+    
+    <!-- 服务类型 -->
+    <string name="service_type_http">Website Service (HTTP)</string>
+    <string name="service_type_ssh">SSH Remote Connection</string>
+    <string name="service_type_rdp">Remote Desktop (RDP)</string>
+    <string name="service_type_tcp">TCP Service</string>
+    <string name="service_type_udp">UDP Service</string>
+    <string name="service_type_https">HTTPS Service</string>
+    <string name="service_type_stcp">Secure TCP</string>
+    <string name="service_type_sudp">Secure UDP</string>
+    <string name="service_type_http_example">e.g.: 80, 8080, 3000</string>
+    <string name="service_type_ssh_example">Default 22</string>
+    <string name="service_type_rdp_example">Default 3389</string>
+    <string name="service_type_tcp_example">Custom port</string>
+    <string name="service_type_udp_example">Custom port</string>
+    <string name="service_type_https_example">e.g.: 443, 8443</string>
+    <string name="service_type_stcp_example">Peer-to-peer connection</string>
+    <string name="service_type_sudp_example">Peer-to-peer connection</string>
+    
+    <!-- 进程守护 -->
+    <string name="process_guard_enabled">Process guard enabled</string>
+    <string name="process_restarting">FRP process exited abnormally, restarting automatically...</string>
+    <string name="process_restart_failed">FRP process restart failed, please check configuration</string>
+    <string name="process_restart_success">FRP process restarted successfully</string>
+    <string name="process_guard_restart_count">Restart count: %1$d</string>
 </resources>
